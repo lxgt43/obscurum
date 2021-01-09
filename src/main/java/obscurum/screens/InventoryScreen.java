@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 import obscurum.GameMain;
 import obscurum.creatures.Creature;
 import obscurum.creatures.Player;
-import obscurum.display.asciiPanel.AsciiPanel;
+import obscurum.display.terminal.AsciiPanel;
 import obscurum.display.Display;
 import obscurum.display.DisplayTile;
 import obscurum.environment.Level;
@@ -16,7 +16,6 @@ import obscurum.items.Inventory;
 import obscurum.items.InventorySlot;
 import obscurum.items.Item;
 import obscurum.placeholders.NullItem;
-import obscurum.screens.HelpScreen;
 
 /**
  * This models an inventory screen, where the player can browse their items,

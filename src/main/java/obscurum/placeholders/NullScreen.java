@@ -1,7 +1,7 @@
 package obscurum.placeholders;
 
 import java.awt.event.KeyEvent;
-import obscurum.display.asciiPanel.AsciiPanel;
+import obscurum.display.terminal.AsciiPanel;
 import obscurum.screens.Screen;
 
 /**

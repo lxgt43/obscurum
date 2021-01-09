@@ -7,10 +7,8 @@ import obscurum.creatures.Creature;
 import obscurum.creatures.Player;
 import obscurum.creatures.util.Line;
 import obscurum.display.Display;
-import obscurum.display.asciiPanel.AsciiPanel;
+import obscurum.display.terminal.AsciiPanel;
 import obscurum.environment.Level;
-import obscurum.environment.foreground.ForegroundTile;
-import obscurum.screens.PlayScreen;
 import obscurum.placeholders.NullCreature;
 
 /**

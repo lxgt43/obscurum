@@ -2,8 +2,7 @@ package obscurum.display;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import obscurum.display.asciiPanel.AsciiPanel;
-import obscurum.display.ListEntry;
+import obscurum.display.terminal.AsciiPanel;
 
 /**
  * This models a scrollable list used in the interface, with corresponding

@@ -1,7 +1,6 @@
 package obscurum.environment.foreground;
 
-import java.awt.Color;
-import obscurum.display.asciiPanel.AsciiPanel;
+import obscurum.display.terminal.AsciiPanel;
 
 /**
  * This models a stone wall tile.

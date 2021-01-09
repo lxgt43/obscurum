@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import obscurum.creatures.*;
 import obscurum.creatures.ai.*;
-import obscurum.display.asciiPanel.AsciiPanel;
 import obscurum.environment.Level;
 import obscurum.environment.foreground.EmptyTile;
 import obscurum.environment.foreground.ForegroundTile;

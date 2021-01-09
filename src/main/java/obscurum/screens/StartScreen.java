@@ -3,7 +3,7 @@ package obscurum.screens;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import obscurum.GameMain;
-import obscurum.display.asciiPanel.AsciiPanel;
+import obscurum.display.terminal.AsciiPanel;
 
 /**
  * This models the game splash screen seen when first running the program.

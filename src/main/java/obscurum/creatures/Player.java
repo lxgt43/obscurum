@@ -1,14 +1,9 @@
 package obscurum.creatures;
 
 import java.awt.Point;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import obscurum.creatures.Creature;
-import obscurum.creatures.abilities.Spell;
-import obscurum.creatures.abilities.FireBlast;
-import obscurum.creatures.abilities.HealingTouch;
-import obscurum.creatures.util.EquipmentList;
-import obscurum.display.asciiPanel.AsciiPanel;
+
+import obscurum.display.terminal.AsciiPanel;
 import obscurum.environment.Level;
 import obscurum.items.ConsumableItem;
 import obscurum.items.Equipment;
@@ -16,9 +11,6 @@ import obscurum.items.Inventory;
 import obscurum.items.InventorySlot;
 import obscurum.items.Item;
 import obscurum.items.armour.*;
-import obscurum.items.weapons.Sword;
-import obscurum.items.weapons.Weapon;
-import obscurum.placeholders.NullCreature;
 import obscurum.placeholders.NullEquipment;
 import obscurum.screens.SubScreen;
 

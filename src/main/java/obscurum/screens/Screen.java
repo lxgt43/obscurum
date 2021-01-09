@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import obscurum.GameMain;
 import obscurum.creatures.Player;
 import obscurum.display.Display;
-import obscurum.display.asciiPanel.AsciiPanel;
+import obscurum.display.terminal.AsciiPanel;
 import obscurum.environment.Level;
 import obscurum.placeholders.NullCreature;
 

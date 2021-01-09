@@ -1,7 +1,7 @@
 package obscurum.environment.background;
 
 import java.awt.Color;
-import obscurum.display.asciiPanel.AsciiPanel;
+
 import obscurum.environment.Tile;
 
 /**

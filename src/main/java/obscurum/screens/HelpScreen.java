@@ -6,7 +6,7 @@ import java.util.Arrays;
 import obscurum.GameMain;
 import obscurum.creatures.Creature;
 import obscurum.creatures.Player;
-import obscurum.display.asciiPanel.AsciiPanel;
+import obscurum.display.terminal.AsciiPanel;
 import obscurum.environment.Level;
 
 /**
