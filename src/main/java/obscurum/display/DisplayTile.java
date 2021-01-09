@@ -9,7 +9,6 @@ import obscurum.GameMain;
 
 @Getter
 public final class DisplayTile {
-    private final String name;
     private final char glyph;
     @Setter
     private Color foregroundColour;
@@ -23,19 +22,11 @@ public final class DisplayTile {
         this(glyph, foregroundColour, Display.BLACK);
     }
 
-    public DisplayTile(char glyph, Color foregroundColour,
-                       Color backgroundColour) {
-        this("Display Tile", glyph, foregroundColour, backgroundColour);
-    }
-
-    public DisplayTile(@NonNull String name, char glyph, @NonNull Color foregroundColour, @NonNull Color backgroundColour) {
-        if (name.isEmpty()) {
-            throw new IllegalArgumentException("Name cannot be empty.");
-        } else if (glyph >= GameMain.NUM_OF_GLYPHS) {
+    public DisplayTile(char glyph, @NonNull Color foregroundColour, @NonNull Color backgroundColour) {
+        if (glyph >= GameMain.NUM_OF_GLYPHS) {
             throw new IllegalArgumentException("Glyph must be in range 0 - " + GameMain.NUM_OF_GLYPHS + ".");
         }
 
-        this.name = name;
         this.glyph = glyph;
         this.foregroundColour = foregroundColour;
         this.backgroundColour = backgroundColour;
