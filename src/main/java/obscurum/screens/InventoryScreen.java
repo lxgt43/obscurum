@@ -136,8 +136,8 @@ public class InventoryScreen extends Screen {
       for (int i = 0; i < depiction.length; i++) {
         for (int j = 0; j < depiction[0].length; j++) {
           terminal.write(depiction[i][j].getDisplayCharacter().getCharacter(), topLeftX + j, topLeftY + i,
-              depiction[i][j].getForegroundColour(),
-              depiction[i][j].getBackgroundColour());
+              depiction[i][j].getForegroundColour().getColour(),
+              depiction[i][j].getBackgroundColour().getColour());
         }
       }
     }

@@ -5,6 +5,7 @@ import java.lang.Math;
 import java.util.ArrayList;
 import obscurum.display.Display;
 import obscurum.display.DisplayCharacter;
+import obscurum.display.DisplayColour;
 import obscurum.display.DisplayTile;
 import obscurum.screens.InventoryScreen;
 
@@ -205,8 +206,7 @@ public class DepictionGenerator {
         return display;
     }
 
-    private DisplayTile[][] generateBlade(int bladeHeight, int bladeWidth,
-                                          Color baseColour, Color accentColour, DisplayTile bottomGlyph,
+    private DisplayTile[][] generateBlade(int bladeHeight, int bladeWidth, DisplayColour accentColour, DisplayTile bottomGlyph,
                                           DisplayTile fillGlyph, int tipType, int cornerType) {
         int tipHeight = tipType > 2 ? 0 : tipType > 0 ? bladeWidth - 1 :
                 bladeWidth / 2 + bladeWidth % 2;
@@ -355,8 +355,10 @@ public class DepictionGenerator {
         DisplayTile bladeFillGlyph;
         Color hiltBaseColour;
         Color hiltAccentColour;
+        DisplayColour displayHiltAccentColour;
         Color bladeBaseColour;
         Color bladeAccentColour;
+        DisplayColour displayBladeAccentColour;
         int features = item.getItemLevel() / 5;
         boolean[] usedFeatures = new boolean[10];
         int[] featureCosts = {1, 1, 3, 2, 2, 2, 2, 3, 1, 5};
@@ -397,7 +399,7 @@ public class DepictionGenerator {
                 // Side glyphs.
                 case 3:
                     hiltLeftGlyph = new DisplayTile(hiltSideGlyphs[(int)(Math.random() *
-                            hiltSideGlyphs.length)], hiltAccentColour);
+                            hiltSideGlyphs.length)], DisplayColour.fromRgb("Colour", hiltAccentColour.getRed(), hiltAccentColour.getGreen(), hiltAccentColour.getBlue()));
                     hiltRightGlyph = getMatchingGlyph(hiltLeftGlyph, hiltSideGlyphs,
                             hiltSideGlyphConstraints);
                     break;
@@ -430,16 +432,16 @@ public class DepictionGenerator {
         }
         if (!usedFeatures[3]) {
             hiltLeftGlyph = new DisplayTile(hiltSideGlyphs[(int)(Math.random() *
-                    hiltSideGlyphs.length)], hiltAccentColour);
+                    hiltSideGlyphs.length)], DisplayColour.fromRgb("Colour", hiltAccentColour.getRed(), hiltAccentColour.getGreen(), hiltAccentColour.getBlue()));
             hiltRightGlyph = new DisplayTile(hiltSideGlyphs[(int)(Math.random() *
-                    hiltSideGlyphs.length)], hiltAccentColour);
+                    hiltSideGlyphs.length)], DisplayColour.fromRgb("Colour", hiltAccentColour.getRed(), hiltAccentColour.getGreen(), hiltAccentColour.getBlue()));
         }
         hiltTopGlyph = new DisplayTile(hiltBaseGlyphs[(int)(Math.random() *
-                hiltBaseGlyphs.length)], hiltAccentColour);
+                hiltBaseGlyphs.length)], DisplayColour.fromRgb("Colour", hiltAccentColour.getRed(), hiltAccentColour.getGreen(), hiltAccentColour.getBlue()));
         hiltBottomGlyph = new DisplayTile(hiltBaseGlyphs[(int)(Math.random() *
-                hiltBaseGlyphs.length)], hiltAccentColour);
+                hiltBaseGlyphs.length)], DisplayColour.fromRgb("Colour", hiltAccentColour.getRed(), hiltAccentColour.getGreen(), hiltAccentColour.getBlue()));
         hiltFillGlyph = new DisplayTile(hiltFillGlyphs[(int)(Math.random() *
-                hiltFillGlyphs.length)], hiltBaseColour);
+                hiltFillGlyphs.length)], DisplayColour.fromRgb("Colour", hiltBaseColour.getRed(), hiltBaseColour.getGreen(), hiltBaseColour.getBlue()));
 
         if (!usedFeatures[2] && Math.random() < 0.5 || usedFeatures[2]) {
             crossguardWidth = hiltWidth + 1 + (int)(Math.random() * hiltWidth * 2);
@@ -470,9 +472,9 @@ public class DepictionGenerator {
             bladeAccentColour = COLOURS[(int)(Math.random() * COLOURS.length)];
         } while (bladeAccentColour.equals(hiltAccentColour));
         bladeBottomGlyph = new DisplayTile(bladeBaseGlyphs[(int)(Math.random() *
-                bladeBaseGlyphs.length)], bladeAccentColour);
+                bladeBaseGlyphs.length)], DisplayColour.fromRgb("Colour", bladeAccentColour.getRed(), bladeAccentColour.getGreen(), bladeAccentColour.getBlue()));
         bladeFillGlyph = new DisplayTile(bladeFillGlyphs[(int)(Math.random() *
-                bladeFillGlyphs.length)], bladeBaseColour);
+                bladeFillGlyphs.length)], DisplayColour.fromRgb("Colour", bladeBaseColour.getRed(), bladeBaseColour.getGreen(), bladeBaseColour.getBlue()));
 
         ArrayList<Integer> allowedTips = new ArrayList<Integer>();
         for (int i = 0; i < 5; i++) {
@@ -505,8 +507,7 @@ public class DepictionGenerator {
                 crossguardWidth, hiltBaseColour, hiltAccentColour, hiltLeftGlyph,
                 hiltRightGlyph, hiltTopGlyph, hiltBottomGlyph, hiltFillGlyph,
                 hiltCornerType);
-        blade = generateBlade(bladeHeight, bladeWidth, bladeBaseColour,
-                bladeAccentColour, bladeBottomGlyph, bladeFillGlyph, tipType,
+        blade = generateBlade(bladeHeight, bladeWidth, DisplayColour.fromRgb("Colour", bladeAccentColour.getRed(), bladeAccentColour.getGreen(), bladeAccentColour.getBlue()), bladeBottomGlyph, bladeFillGlyph, tipType,
                 bladeCornerType);
 
         if (item.getModifier().getName().equals("Rusty")) {
@@ -514,7 +515,7 @@ public class DepictionGenerator {
                 for (int j = 0; j < blade[i].length; j++) {
                     if (Math.random() < 0.3) {
                         blade[i][j] = new DisplayTile(blade[i][j].getDisplayCharacter(),
-                                Display.BROWN);
+                                DisplayColour.BROWN);
                     }
                 }
             }
@@ -522,11 +523,12 @@ public class DepictionGenerator {
 
         if (usedFeatures[9]) {
             for (int i = 0; i < bladeHeight; i += 2) {
+                Color qualityColour = Display.QUALITY_COLOURS[item.getQuality()];
                 blade[i][bladeWidth / 2] =
-                        new DisplayTile(DisplayCharacter.ASTERISK, Display.QUALITY_COLOURS[item.getQuality()]);
+                        new DisplayTile(DisplayCharacter.ASTERISK, DisplayColour.fromRgb("Colour", qualityColour.getRed(), qualityColour.getGreen(), qualityColour.getBlue()));
                 if (bladeWidth % 2 == 0) {
                     blade[i][bladeWidth / 2 - 1] =
-                            new DisplayTile(DisplayCharacter.ASTERISK, Display.QUALITY_COLOURS[item.getQuality()]);
+                            new DisplayTile(DisplayCharacter.ASTERISK, DisplayColour.fromRgb("Colour", qualityColour.getRed(), qualityColour.getGreen(), qualityColour.getBlue()));
                 }
             }
         }
@@ -539,10 +541,10 @@ public class DepictionGenerator {
             return generateSword();
         }
         DisplayTile[][] placeholder = {
-                {new DisplayTile(DisplayCharacter.PLUS, Display.RED), new DisplayTile(DisplayCharacter.PLUS, Display.BLUE)},
-                {new DisplayTile(DisplayCharacter.of('|'), Display.RED), new DisplayTile(DisplayCharacter.of('|'), Display.BLUE)},
-                {new DisplayTile(DisplayCharacter.of('-'), Display.RED),
-                        new DisplayTile(DisplayCharacter.of('-'), Display.BLUE, Display.YELLOW)}};
+                {new DisplayTile(DisplayCharacter.PLUS, DisplayColour.RED), new DisplayTile(DisplayCharacter.PLUS, DisplayColour.BLUE)},
+                {new DisplayTile(DisplayCharacter.of('|'), DisplayColour.RED), new DisplayTile(DisplayCharacter.of('|'), DisplayColour.BLUE)},
+                {new DisplayTile(DisplayCharacter.of('-'), DisplayColour.RED),
+                        new DisplayTile(DisplayCharacter.of('-'), DisplayColour.BLUE, DisplayColour.YELLOW)}};
         return new DisplayTile[][]{{new DisplayTile(DisplayCharacter.of(' '))}};
     }
 

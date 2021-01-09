@@ -1,25 +1,23 @@
 package obscurum.display;
 
-import java.awt.Color;
-
 import lombok.Getter;
 import lombok.NonNull;
 
 @Getter
 public final class DisplayTile {
     private final DisplayCharacter displayCharacter;
-    private final Color foregroundColour;
-    private final Color backgroundColour;
+    private final DisplayColour foregroundColour;
+    private final DisplayColour backgroundColour;
 
     public DisplayTile(@NonNull DisplayCharacter displayCharacter) {
-        this(displayCharacter, Display.WHITE, Display.BLACK);
+        this(displayCharacter, DisplayColour.WHITE, DisplayColour.BLACK);
     }
 
-    public DisplayTile(@NonNull DisplayCharacter displayCharacter, @NonNull Color foregroundColour) {
-        this(displayCharacter, foregroundColour, Display.BLACK);
+    public DisplayTile(@NonNull DisplayCharacter displayCharacter, @NonNull DisplayColour foregroundColour) {
+        this(displayCharacter, foregroundColour, DisplayColour.BLACK);
     }
 
-    public DisplayTile(@NonNull DisplayCharacter displayCharacter, @NonNull Color foregroundColour, @NonNull Color backgroundColour) {
+    public DisplayTile(@NonNull DisplayCharacter displayCharacter, @NonNull DisplayColour foregroundColour, @NonNull DisplayColour backgroundColour) {
         this.displayCharacter = displayCharacter;
         this.foregroundColour = foregroundColour;
         this.backgroundColour = backgroundColour;
