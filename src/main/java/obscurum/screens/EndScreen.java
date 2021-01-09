@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 import obscurum.GameMain;
 import obscurum.creatures.Creature;
 import obscurum.creatures.Player;
-import obscurum.display.asciiPanel.AsciiPanel;
+import obscurum.display.terminal.AsciiPanel;
 
 /**
  * This models the end screen, which displays a message depending on whether

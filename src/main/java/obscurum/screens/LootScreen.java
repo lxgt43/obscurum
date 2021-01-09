@@ -1,20 +1,15 @@
 package obscurum.screens;
 
-import java.awt.Color;
-import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.lang.Math;
 import java.util.ArrayList;
 import obscurum.util.Util;
 import obscurum.creatures.Creature;
 import obscurum.creatures.Player;
-import obscurum.display.Display;
 import obscurum.display.ListEntry;
 import obscurum.display.ScrollList;
-import obscurum.display.asciiPanel.AsciiPanel;
+import obscurum.display.terminal.AsciiPanel;
 import obscurum.environment.Level;
-import obscurum.placeholders.NullItem;
-import obscurum.screens.Screen;
 
 /**
  * This models a subscreen where a player can see what items a corpse or a

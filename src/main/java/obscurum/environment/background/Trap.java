@@ -1,8 +1,7 @@
 package obscurum.environment.background;
 
-import java.awt.Color;
 import obscurum.creatures.Creature;
-import obscurum.display.asciiPanel.AsciiPanel;
+import obscurum.display.terminal.AsciiPanel;
 
 /**
  * This models a trap, which looks similar to a given source background tile,

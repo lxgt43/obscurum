@@ -1,7 +1,6 @@
 package obscurum.environment.foreground;
 
 import java.awt.Color;
-import obscurum.display.asciiPanel.AsciiPanel;
 
 /**
  * This models a custom foreground tile, used for tiles added through the

@@ -1,7 +1,6 @@
 package obscurum.environment.background;
 
 import java.awt.Color;
-import obscurum.display.asciiPanel.AsciiPanel;
 
 /**
  * This models a custom background tile, used for tiles added through the

@@ -1,4 +1,4 @@
-package obscurum.display.asciiPanel;
+package obscurum.display.terminal;
 
 import java.awt.Color;
 import java.awt.Dimension;

@@ -1,14 +1,12 @@
 package obscurum.screens;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.lang.Math;
 import obscurum.GameMain;
 import obscurum.creatures.Player;
 import obscurum.display.Display;
-import obscurum.display.asciiPanel.AsciiPanel;
+import obscurum.display.terminal.AsciiPanel;
 import obscurum.environment.Level;
-import obscurum.screens.Screen;
 
 /**
  * This models a subscreen, which is displayed on top of a parent screen and

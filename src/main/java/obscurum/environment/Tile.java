@@ -2,7 +2,6 @@ package obscurum.environment;
 
 import java.awt.Color;
 import obscurum.GameMain;
-import obscurum.display.asciiPanel.AsciiPanel;
 
 /**
  * This models a game tile.
