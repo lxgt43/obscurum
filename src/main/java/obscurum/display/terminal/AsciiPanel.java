@@ -42,92 +42,18 @@ public class AsciiPanel extends JPanel {
   private int lastMultilineX;
   private int lastMultilineY;
 
-  /**
-   * Sets the distance from the left new text will be written to. This should
-   * be equal to or greater than 0 and less than the the width in characters.
-   * @param cursorX the distance from the left new text should be written to
-   */
-  public void setCursorX(int cursorX) {
-    if (cursorX < 0 || cursorX >= widthInCharacters)
-        throw new IllegalArgumentException("cursorX " + cursorX +
-        " must be within range [0," + widthInCharacters + ").");
-
-    this.cursorX = cursorX;
-  }
-
-  /**
-   * Gets the distance from the top new text will be written to.
-   * @return
-   */
-  public int getCursorY() {
-    return cursorY;
-  }
-
-  /**
-   * Sets the distance from the top new text will be written to. This should be
-   * equal to or greater than 0 and less than the the height in characters.
-   * @param cursorY the distance from the top new text should be written to
-   */
-  public void setCursorY(int cursorY) {
-    if (cursorY < 0 || cursorY >= heightInCharacters)
-      throw new IllegalArgumentException("cursorY " + cursorY +
-          " must be within range [0," + heightInCharacters + ").");
-
-    this.cursorY = cursorY;
-  }
-
-  /**
-   * Sets the x and y position of where new text will be written to. The origin
-   * (0,0) is the upper left corner. The x should be equal to or greater than 0
-   * and less than the the width in characters. The y should be equal to or
-   * greater than 0 and less than the the height in characters.
-   * @param x the distance from the left new text should be written to
-   * @param y the distance from the top new text should be written to
-   */
-  public void setCursorPosition(int x, int y) {
-    setCursorX(x);
-    setCursorY(y);
-  }
-
-  /**
-   * Gets the default background color that is used when writing new text.
-   * @return
-   */
-  public Color getDefaultBackgroundColor() {
-    return defaultBackgroundColor;
-  }
-
-  /**
-   * Gets the default foreground color that is used when writing new text.
-   * @return
-   */
-  public Color getDefaultForegroundColor() {
-    return defaultForegroundColor;
-  }
-
-  /**
-   * Class constructor.
-   * Default size is 80x24.
-   */
   public AsciiPanel() {
     this(80, 24);
   }
 
-  /**
-   * Class constructor specifying the width and height in characters.
-   * @param width
-   * @param height
-   */
   public AsciiPanel(int width, int height) {
     super();
 
     if (width < 1)
-      throw new IllegalArgumentException("width " + width +
-          " must be greater than 0.");
+      throw new IllegalArgumentException("width " + width + " must be greater than 0.");
 
     if (height < 1)
-      throw new IllegalArgumentException("height " + height +
-          " must be greater than 0.");
+      throw new IllegalArgumentException("height " + height + " must be greater than 0.");
 
     widthInCharacters = width;
     heightInCharacters = height;
@@ -150,6 +76,22 @@ public class AsciiPanel extends JPanel {
     loadGlyphs();
 
     AsciiPanel.this.clear();
+  }
+
+  private void setCursorX(int cursorX) {
+    if (cursorX < 0 || cursorX >= widthInCharacters)
+      throw new IllegalArgumentException("cursorX " + cursorX +
+              " must be within range [0," + widthInCharacters + ").");
+
+    this.cursorX = cursorX;
+  }
+
+  private void setCursorY(int cursorY) {
+    if (cursorY < 0 || cursorY >= heightInCharacters)
+      throw new IllegalArgumentException("cursorY " + cursorY +
+              " must be within range [0," + heightInCharacters + ").");
+
+    this.cursorY = cursorY;
   }
 
   @Override
