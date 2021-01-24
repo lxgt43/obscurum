@@ -1,18 +1,13 @@
 package obscurum.environment.background;
 
 import obscurum.creatures.Creature;
-import obscurum.display.terminal.AsciiPanel;
+import obscurum.display.DisplayColour;
 
-/**
- * This models a trap, which looks similar to a given source background tile,
- * and which triggers when the player steps on it.
- * @author Alex Ghita
- */
 public abstract class Trap extends BackgroundTile {
   BackgroundTile sourceTile;
 
   public Trap() {
-    super("Trap", (char)250, AsciiPanel.red, AsciiPanel.black);
+    super("Trap", (char)250, DisplayColour.RED.getColour(), DisplayColour.BLACK.getColour());
     sourceTile = new Floor();
   }
 

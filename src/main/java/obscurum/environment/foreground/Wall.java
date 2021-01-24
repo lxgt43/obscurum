@@ -1,6 +1,6 @@
 package obscurum.environment.foreground;
 
-import obscurum.display.terminal.AsciiPanel;
+import obscurum.display.DisplayColour;
 
 /**
  * This models a wall.
@@ -8,6 +8,6 @@ import obscurum.display.terminal.AsciiPanel;
  */
 public class Wall extends ForegroundTile {
   public Wall() {
-    super("Wall", (char)177, AsciiPanel.yellow, 1, 0, true, true);
+    super("Wall", (char)177, DisplayColour.YELLOW.getColour(), 1, 0, true, true);
   }
 }

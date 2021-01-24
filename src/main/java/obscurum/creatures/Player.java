@@ -3,7 +3,7 @@ package obscurum.creatures;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import obscurum.display.terminal.AsciiPanel;
+import obscurum.display.DisplayColour;
 import obscurum.environment.Level;
 import obscurum.items.ConsumableItem;
 import obscurum.items.Equipment;
@@ -44,7 +44,7 @@ public class Player extends Creature {
   public Player(Level level, Point location, int inventorySize,
       int lineOfSight, int health, int mana, int armour, int strength,
       int agility, int stamina, int spirit, int intellect) {
-    super("Player", '@', AsciiPanel.brightWhite, level, location, 1,
+    super("Player", '@', DisplayColour.BRIGHT_WHITE.getColour(), level, location, 1,
         lineOfSight, inventorySize, MAX_RANGE, health, mana, armour, strength,
         agility, stamina, spirit, intellect);
     inSubScreen = false;

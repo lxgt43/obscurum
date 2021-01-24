@@ -3,6 +3,7 @@ package obscurum.items.weapons;
 import java.lang.Math;
 import obscurum.display.Display;
 import obscurum.display.DisplayCharacter;
+import obscurum.display.DisplayColour;
 import obscurum.display.DisplayTile;
 import obscurum.items.Item;
 
@@ -13,35 +14,35 @@ import obscurum.items.Item;
 public class Bow extends Weapon {
   private static DisplayTile[][] standardDepiction = {
       {new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')),
-       new DisplayTile(DisplayCharacter.of('('), Display.BROWN),
+       new DisplayTile(DisplayCharacter.of('('), DisplayColour.BROWN),
        new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')),
        new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')),
        new DisplayTile(DisplayCharacter.of(' '))},
       {new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')),
-       new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of('\\'), Display.BROWN),
+       new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of('\\'), DisplayColour.BROWN),
        new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')),
        new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' '))},
       {new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')),
        new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')),
-       new DisplayTile(DisplayCharacter.of(')'), Display.BROWN), new DisplayTile(DisplayCharacter.of(' ')),
+       new DisplayTile(DisplayCharacter.of(')'), DisplayColour.BROWN), new DisplayTile(DisplayCharacter.of(' ')),
        new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')),
        new DisplayTile(DisplayCharacter.of(' '))},
-      {new DisplayTile(DisplayCharacter.of('>'), Display.RED), new DisplayTile(DisplayCharacter.of('>'), Display.RED),
+      {new DisplayTile(DisplayCharacter.of('>'), DisplayColour.RED), new DisplayTile(DisplayCharacter.of('>'), DisplayColour.RED),
        new DisplayTile(DisplayCharacter.of('-')), new DisplayTile(DisplayCharacter.of('-')), new DisplayTile(DisplayCharacter.of('-')),
        new DisplayTile(DisplayCharacter.of('-')), new DisplayTile(DisplayCharacter.of('-')), new DisplayTile(DisplayCharacter.of('-')),
        new DisplayTile(DisplayCharacter.of('-')), new DisplayTile(DisplayCharacter.of('-')),
-       new DisplayTile(DisplayCharacter.of('>'), Display.GREEN)},
+       new DisplayTile(DisplayCharacter.of('>'), DisplayColour.GREEN)},
       {new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')),
        new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')),
-       new DisplayTile(DisplayCharacter.of(')'), Display.BROWN), new DisplayTile(DisplayCharacter.of(' ')),
+       new DisplayTile(DisplayCharacter.of(')'), DisplayColour.BROWN), new DisplayTile(DisplayCharacter.of(' ')),
        new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')),
        new DisplayTile(DisplayCharacter.of(' '))},
       {new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')),
-       new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of('/'), Display.BROWN),
+       new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of('/'), DisplayColour.BROWN),
        new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')),
        new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' '))},
       {new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')),
-       new DisplayTile(DisplayCharacter.of(')'), Display.BROWN),
+       new DisplayTile(DisplayCharacter.of(')'), DisplayColour.BROWN),
        new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')),
        new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')), new DisplayTile(DisplayCharacter.of(' ')),
        new DisplayTile(DisplayCharacter.of(' '))}

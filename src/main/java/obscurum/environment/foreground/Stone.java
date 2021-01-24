@@ -1,13 +1,9 @@
 package obscurum.environment.foreground;
 
-import obscurum.display.terminal.AsciiPanel;
+import obscurum.display.DisplayColour;
 
-/**
- * This models a stone wall tile.
- * @author Alex Ghita
- */
 public class Stone extends ForegroundTile {
   public Stone() {
-    super("Stone", (char)177, AsciiPanel.brightBlack, 1, 0, true, true);
+    super("Stone", (char)177, DisplayColour.BRIGHT_BLACK.getColour(), 1, 0, true, true);
   }
 }
