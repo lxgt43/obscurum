@@ -1,6 +1,8 @@
 package obscurum.display.terminal;
 
 import obscurum.display.DisplayColour;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,14 +16,18 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 public class AsciiPanel extends JPanel {
+  private static final Logger log = LoggerFactory.getLogger(AsciiPanel.class);
+
+  private static final int GLYPH_WIDTH_IN_PIXELS = 9;
+  private static final int GLYPH_HEIGHT_IN_PIXELS = 16;
+
+  private final int widthInCharacters;
+  private final int heightInCharacters;
+  private final Color defaultBackgroundColor;
+  private final Color defaultForegroundColor;
+
   private Image offscreenBuffer;
   private Graphics offscreenGraphics;
-  private int widthInCharacters;
-  private int heightInCharacters;
-  private int charWidth = 9;
-  private int charHeight = 16;
-  private Color defaultBackgroundColor;
-  private Color defaultForegroundColor;
   private int cursorX;
   private int cursorY;
   private BufferedImage glyphSprite;
@@ -35,46 +41,6 @@ public class AsciiPanel extends JPanel {
 
   private int lastMultilineX;
   private int lastMultilineY;
-
-  /**
-   * Gets the height, in pixels, of a character.
-   * @return
-   */
-  public int getCharHeight() {
-    return charHeight;
-  }
-
-  /**
-   * Gets the width, in pixels, of a character.
-   * @return
-   */
-  public int getCharWidth() {
-    return charWidth;
-  }
-
-  /**
-   * Gets the height in characters. A standard terminal is 24 characters high.
-   * @return
-   */
-  public int getHeightInCharacters() {
-    return heightInCharacters;
-  }
-
-  /**
-   * Gets the width in characters. A standard terminal is 80 characters wide.
-   * @return
-   */
-  public int getWidthInCharacters() {
-    return widthInCharacters;
-  }
-
-  /**
-   * Gets the distance from the left new text will be written to.
-   * @return
-   */
-  public int getCursorX() {
-    return cursorX;
-  }
 
   /**
    * Sets the distance from the left new text will be written to. This should
@@ -132,35 +98,11 @@ public class AsciiPanel extends JPanel {
   }
 
   /**
-   * Sets the default background color that is used when writing new text.
-   * @param defaultBackgroundColor
-   */
-  public void setDefaultBackgroundColor(Color defaultBackgroundColor) {
-    if (defaultBackgroundColor == null)
-      throw new NullPointerException(
-          "defaultBackgroundColor must not be null.");
-
-    this.defaultBackgroundColor = defaultBackgroundColor;
-  }
-
-  /**
    * Gets the default foreground color that is used when writing new text.
    * @return
    */
   public Color getDefaultForegroundColor() {
     return defaultForegroundColor;
-  }
-
-  /**
-   * Sets the default foreground color that is used when writing new text.
-   * @param defaultForegroundColor
-   */
-  public void setDefaultForegroundColor(Color defaultForegroundColor) {
-    if (defaultForegroundColor == null)
-      throw new NullPointerException(
-          "defaultForegroundColor must not be null.");
-
-    this.defaultForegroundColor = defaultForegroundColor;
   }
 
   /**
@@ -189,8 +131,8 @@ public class AsciiPanel extends JPanel {
 
     widthInCharacters = width;
     heightInCharacters = height;
-    setPreferredSize(new Dimension(charWidth * widthInCharacters,
-        charHeight * heightInCharacters));
+    setPreferredSize(new Dimension(GLYPH_WIDTH_IN_PIXELS * widthInCharacters,
+        GLYPH_HEIGHT_IN_PIXELS * heightInCharacters));
 
     defaultBackgroundColor = DisplayColour.BLACK.getColour();
     defaultForegroundColor = DisplayColour.WHITE.getColour();
@@ -237,7 +179,7 @@ public class AsciiPanel extends JPanel {
 
         LookupOp op = setColors(bg, fg);
         BufferedImage img = op.filter(glyphs[chars[x][y]], null);
-        offscreenGraphics.drawImage(img, x * charWidth, y * charHeight, null);
+        offscreenGraphics.drawImage(img, x * GLYPH_WIDTH_IN_PIXELS, y * GLYPH_HEIGHT_IN_PIXELS, null);
 
         oldBackgroundColors[x][y] = backgroundColors[x][y];
         oldForegroundColors[x][y] = foregroundColors[x][y];
@@ -256,13 +198,13 @@ public class AsciiPanel extends JPanel {
     }
 
     for (int i = 0; i < 256; i++) {
-      int sx = (i % 32) * charWidth + 8;
-      int sy = (i / 32) * charHeight + 8;
+      int sx = (i % 32) * GLYPH_WIDTH_IN_PIXELS + 8;
+      int sy = (i / 32) * GLYPH_HEIGHT_IN_PIXELS + 8;
 
-      glyphs[i] = new BufferedImage(charWidth, charHeight,
+      glyphs[i] = new BufferedImage(GLYPH_WIDTH_IN_PIXELS, GLYPH_HEIGHT_IN_PIXELS,
           BufferedImage.TYPE_INT_ARGB);
-      glyphs[i].getGraphics().drawImage(glyphSprite, 0, 0, charWidth,
-          charHeight, sx, sy, sx + charWidth, sy + charHeight, null);
+      glyphs[i].getGraphics().drawImage(glyphSprite, 0, 0, GLYPH_WIDTH_IN_PIXELS,
+              GLYPH_HEIGHT_IN_PIXELS, sx, sy, sx + GLYPH_WIDTH_IN_PIXELS, sy + GLYPH_HEIGHT_IN_PIXELS, null);
     }
   }
 
