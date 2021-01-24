@@ -31,13 +31,13 @@ public class AsciiPanel extends JPanel {
     private int cursorX;
     private int cursorY;
     private BufferedImage glyphSprite;
-    private BufferedImage[] glyphs;
-    private char[][] chars;
-    private Color[][] backgroundColors;
-    private Color[][] foregroundColors;
-    private char[][] oldChars;
-    private Color[][] oldBackgroundColors;
-    private Color[][] oldForegroundColors;
+    private final BufferedImage[] glyphs;
+    private final char[][] chars;
+    private final Color[][] backgroundColors;
+    private final Color[][] foregroundColors;
+    private final char[][] oldChars;
+    private final Color[][] oldBackgroundColors;
+    private final Color[][] oldForegroundColors;
 
     private int lastMultilineX;
     private int lastMultilineY;
@@ -49,16 +49,15 @@ public class AsciiPanel extends JPanel {
     public AsciiPanel(int width, int height) {
         super();
 
-        if (width < 1)
+        if (width < 1)  {
             throw new IllegalArgumentException("width " + width + " must be greater than 0.");
-
-        if (height < 1)
+        } else if (height < 1) {
             throw new IllegalArgumentException("height " + height + " must be greater than 0.");
+        }
 
         widthInCharacters = width;
         heightInCharacters = height;
-        setPreferredSize(new Dimension(GLYPH_WIDTH_IN_PIXELS * widthInCharacters,
-                GLYPH_HEIGHT_IN_PIXELS * heightInCharacters));
+        setPreferredSize(new Dimension(GLYPH_WIDTH_IN_PIXELS * widthInCharacters, GLYPH_HEIGHT_IN_PIXELS * heightInCharacters));
 
         defaultBackgroundColor = DisplayColour.BLACK;
         defaultForegroundColor = DisplayColour.WHITE;
@@ -79,17 +78,17 @@ public class AsciiPanel extends JPanel {
     }
 
     private void setCursorX(int cursorX) {
-        if (cursorX < 0 || cursorX >= widthInCharacters)
-            throw new IllegalArgumentException("cursorX " + cursorX +
-                    " must be within range [0," + widthInCharacters + ").");
+        if (cursorX < 0 || cursorX >= widthInCharacters) {
+            throw new IllegalArgumentException("cursorX " + cursorX + " must be within range [0," + widthInCharacters + ").");
+        }
 
         this.cursorX = cursorX;
     }
 
     private void setCursorY(int cursorY) {
-        if (cursorY < 0 || cursorY >= heightInCharacters)
-            throw new IllegalArgumentException("cursorY " + cursorY +
-                    " must be within range [0," + heightInCharacters + ").");
+        if (cursorY < 0 || cursorY >= heightInCharacters) {
+            throw new IllegalArgumentException("cursorY " + cursorY + " must be within range [0," + heightInCharacters + ").");
+        }
 
         this.cursorY = cursorY;
     }
@@ -259,8 +258,8 @@ public class AsciiPanel extends JPanel {
         chars[x][y] = character;
         foregroundColors[x][y] = foregroundColour.getColour();
         backgroundColors[x][y] = backgroundColour.getColour();
-        cursorX = x + 1;
-        cursorY = y;
+        setCursorX((x + 1) % widthInCharacters);
+        setCursorY(y);
         return this;
     }
 
@@ -310,19 +309,15 @@ public class AsciiPanel extends JPanel {
         return this;
     }
 
-    public AsciiPanel writeCenter(String string, int y) {
-        int x = (widthInCharacters - string.length()) / 2;
-
-        return write(string, x, y, defaultForegroundColor, defaultBackgroundColor);
+    public void writeCenter(String string, int y) {
+        writeCenter(string, y, defaultForegroundColor, defaultBackgroundColor);
     }
 
-    public AsciiPanel writeCenter(String string, int y, DisplayColour foregrounColour) {
-        int x = (widthInCharacters - string.length()) / 2;
-
-        return write(string, x, y, foregrounColour, defaultBackgroundColor);
+    public void writeCenter(String string, int y, DisplayColour foregroundColour) {
+        writeCenter(string, y, foregroundColour, defaultBackgroundColor);
     }
 
-    public AsciiPanel writeCenter(String string, int y, DisplayColour foregroundColour, DisplayColour backgroundColour) {
+    public void writeCenter(String string, int y, DisplayColour foregroundColour, DisplayColour backgroundColour) {
         if (string == null) {
             throw new NullPointerException("string must not be null.");
         } else if (string.length() >= widthInCharacters) {
@@ -336,28 +331,26 @@ public class AsciiPanel extends JPanel {
         for (int i = 0; i < string.length(); i++) {
             write(string.charAt(i), x + i, y, foregroundColour, backgroundColour);
         }
-
-        return this;
     }
 
-    public AsciiPanel writeMultiline(String string, int x, int y) {
-        return writeMultiline(string, x, y, widthInCharacters, heightInCharacters, defaultForegroundColor, defaultBackgroundColor);
+    public void writeMultiline(String string, int x, int y) {
+        writeMultiline(string, x, y, widthInCharacters, heightInCharacters, defaultForegroundColor, defaultBackgroundColor);
     }
 
-    public AsciiPanel writeMultiline(String string, int x, int y, DisplayColour foregroundColour) {
-        return writeMultiline(string, x, y, widthInCharacters, heightInCharacters, foregroundColour, defaultBackgroundColor);
+    public void writeMultiline(String string, int x, int y, DisplayColour foregroundColour) {
+        writeMultiline(string, x, y, widthInCharacters, heightInCharacters, foregroundColour, defaultBackgroundColor);
     }
 
-    public AsciiPanel writeMultiline(String string, int x, int y, int xBound, int yBound) {
-        return writeMultiline(string, x, y, xBound, yBound, defaultForegroundColor, defaultBackgroundColor);
+    public void writeMultiline(String string, int x, int y, int xBound, int yBound) {
+        writeMultiline(string, x, y, xBound, yBound, defaultForegroundColor, defaultBackgroundColor);
     }
 
 
-    public AsciiPanel writeMultiline(String string, int x, int y, int xBound, int yBound, DisplayColour foregroundColour) {
-        return writeMultiline(string, x, y, xBound, yBound, foregroundColour, defaultBackgroundColor);
+    public void writeMultiline(String string, int x, int y, int xBound, int yBound, DisplayColour foregroundColour) {
+        writeMultiline(string, x, y, xBound, yBound, foregroundColour, defaultBackgroundColor);
     }
 
-    public AsciiPanel writeMultiline(String string, int x, int y, int xBound, int yBound, DisplayColour foregroundColour, DisplayColour backgroundColour) {
+    public void writeMultiline(String string, int x, int y, int xBound, int yBound, DisplayColour foregroundColour, DisplayColour backgroundColour) {
         if (string == null) {
             throw new NullPointerException("string must not be null");
         } else if (x > xBound || y > yBound) {
@@ -369,7 +362,6 @@ public class AsciiPanel extends JPanel {
         String[] words = string.split(" ");
         int currentX = x;
         int currentY = y;
-        boolean first = true;
 
         for (int i = 0; i < words.length; i++) {
             if (words[i].equals("\n")) {
@@ -384,21 +376,18 @@ public class AsciiPanel extends JPanel {
                 if (currentX + words[i].length() == xBound - 1) {
                     words[i] = words[i].trim();
                 }
-                write(words[i], currentX, currentY, foregroundColour, backgroundColour);
-                currentX += words[i].length();
             } else {
                 currentX = x;
                 currentY++;
                 if (currentY >= yBound) {
                     throw new IndexOutOfBoundsException("Not enough space to print.");
                 }
-                write(words[i], currentX, currentY, foregroundColour, backgroundColour);
-                currentX += words[i].length();
             }
+            write(words[i], currentX, currentY, foregroundColour, backgroundColour);
+            currentX += words[i].length();
         }
         lastMultilineX = currentX;
         lastMultilineY = currentY;
-        return this;
     }
 
     public int getLastMultilineX() {
