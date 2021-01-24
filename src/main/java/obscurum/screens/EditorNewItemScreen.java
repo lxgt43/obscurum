@@ -71,8 +71,8 @@ public class EditorNewItemScreen extends SubScreen {
 
     @Override
     protected void computeTopLeft() {
-        topLeft = new Point(GameMain.SCREEN_WIDTH / 2 - width / 2,
-                GameMain.SCREEN_HEIGHT / 2 - height / 2);
+        topLeft = new Point(GameMain.SCREEN_WIDTH_IN_CHARACTERS / 2 - width / 2,
+                GameMain.SCREEN_HEIGHT_IN_CHARACTERS / 2 - height / 2);
     }
 
     @Override

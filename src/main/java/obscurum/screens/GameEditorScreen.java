@@ -26,13 +26,13 @@ public class GameEditorScreen extends Screen {
     private static final int CURRENT_LIST_TL_X = 0;
     private static final int CURRENT_LIST_TL_Y = 0;
     private static final int CURRENT_LIST_WIDTH = 25;
-    private static final int CURRENT_LIST_HEIGHT = GameMain.SCREEN_HEIGHT;
+    private static final int CURRENT_LIST_HEIGHT = GameMain.SCREEN_HEIGHT_IN_CHARACTERS;
     private static final int OBJECT_DATA_TL_X = CURRENT_LIST_TL_X +
             CURRENT_LIST_WIDTH - 1;
     private static final int OBJECT_DATA_TL_Y = 0;
-    private static final int OBJECT_DATA_WIDTH = GameMain.SCREEN_WIDTH -
+    private static final int OBJECT_DATA_WIDTH = GameMain.SCREEN_WIDTH_IN_CHARACTERS -
             CURRENT_LIST_WIDTH + 1;
-    private static final int OBJECT_DATA_HEIGHT = GameMain.SCREEN_HEIGHT;
+    private static final int OBJECT_DATA_HEIGHT = GameMain.SCREEN_HEIGHT_IN_CHARACTERS;
     private static final String[] listNames = {"Foreground Tiles",
             "Background Tiles"};
     private ArrayList<CustomForegroundTile> foregroundTiles;

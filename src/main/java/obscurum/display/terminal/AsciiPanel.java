@@ -1,18 +1,15 @@
 package obscurum.display.terminal;
 
+import lombok.NonNull;
 import obscurum.display.DisplayColour;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ByteLookupTable;
 import java.awt.image.LookupOp;
-import java.io.IOException;
-import javax.imageio.ImageIO;
+import java.util.List;
 import javax.swing.JPanel;
 
 public class AsciiPanel extends JPanel {
@@ -28,10 +25,8 @@ public class AsciiPanel extends JPanel {
 
     private Image offscreenBuffer;
     private Graphics offscreenGraphics;
-    private int cursorX;
-    private int cursorY;
-    private BufferedImage glyphSprite;
-    private final BufferedImage[] glyphs;
+    private final Point cursor = new Point(0, 0);
+    private final List<BufferedImage> glyphs;
     private final char[][] chars;
     private final Color[][] backgroundColors;
     private final Color[][] foregroundColors;
@@ -42,39 +37,38 @@ public class AsciiPanel extends JPanel {
     private int lastMultilineX;
     private int lastMultilineY;
 
-    public AsciiPanel() {
-        this(80, 24);
-    }
-
-    public AsciiPanel(int width, int height) {
+    public AsciiPanel(int widthInCharacters,
+                      int heightInCharacters,
+                      @NonNull List<BufferedImage> glyphs,
+                      @NonNull Dimension panelSize,
+                      @NonNull DisplayColour defaultBackgroundColor,
+                      @NonNull DisplayColour defaultForegroundColor) {
         super();
 
-        if (width < 1)  {
-            throw new IllegalArgumentException("width " + width + " must be greater than 0.");
-        } else if (height < 1) {
-            throw new IllegalArgumentException("height " + height + " must be greater than 0.");
+        if (widthInCharacters < 1)  {
+            throw new IllegalArgumentException(String.format("Width must be greater than 0, but %d provided", widthInCharacters));
+        } else if (heightInCharacters < 1) {
+            throw new IllegalArgumentException(String.format("Height must be greater than 0, but %d provided", heightInCharacters));
+        } else if (glyphs.isEmpty()) {
+            throw new IllegalArgumentException("Glyphs list cannot be empty");
         }
 
-        widthInCharacters = width;
-        heightInCharacters = height;
-        setPreferredSize(new Dimension(GLYPH_WIDTH_IN_PIXELS * widthInCharacters, GLYPH_HEIGHT_IN_PIXELS * heightInCharacters));
+        this.widthInCharacters = widthInCharacters;
+        this.heightInCharacters = heightInCharacters;
+        this.glyphs = glyphs;
+        setPreferredSize(panelSize);
 
-        defaultBackgroundColor = DisplayColour.BLACK;
-        defaultForegroundColor = DisplayColour.WHITE;
+        this.defaultBackgroundColor = defaultBackgroundColor;
+        this.defaultForegroundColor = defaultForegroundColor;
 
-        chars = new char[widthInCharacters][heightInCharacters];
-        backgroundColors = new Color[widthInCharacters][heightInCharacters];
-        foregroundColors = new Color[widthInCharacters][heightInCharacters];
+        // These three fields should make up a list of DisplayTiles
+        chars = new char[this.widthInCharacters][this.heightInCharacters];
+        backgroundColors = new Color[this.widthInCharacters][this.heightInCharacters];
+        foregroundColors = new Color[this.widthInCharacters][this.heightInCharacters];
 
-        oldChars = new char[widthInCharacters][heightInCharacters];
-        oldBackgroundColors = new Color[widthInCharacters][heightInCharacters];
-        oldForegroundColors = new Color[widthInCharacters][heightInCharacters];
-
-        glyphs = new BufferedImage[256];
-
-        loadGlyphs();
-
-        AsciiPanel.this.clear();
+        oldChars = new char[this.widthInCharacters][this.heightInCharacters];
+        oldBackgroundColors = new Color[this.widthInCharacters][this.heightInCharacters];
+        oldForegroundColors = new Color[this.widthInCharacters][this.heightInCharacters];
     }
 
     private void setCursorX(int cursorX) {
@@ -82,7 +76,7 @@ public class AsciiPanel extends JPanel {
             throw new IllegalArgumentException("cursorX " + cursorX + " must be within range [0," + widthInCharacters + ").");
         }
 
-        this.cursorX = cursorX;
+        this.cursor.x = cursorX;
     }
 
     private void setCursorY(int cursorY) {
@@ -90,7 +84,7 @@ public class AsciiPanel extends JPanel {
             throw new IllegalArgumentException("cursorY " + cursorY + " must be within range [0," + heightInCharacters + ").");
         }
 
-        this.cursorY = cursorY;
+        this.cursor.y = cursorY;
     }
 
     @Override
@@ -119,7 +113,7 @@ public class AsciiPanel extends JPanel {
                 Color fg = foregroundColors[x][y];
 
                 LookupOp op = setColors(bg, fg);
-                BufferedImage img = op.filter(glyphs[chars[x][y]], null);
+                BufferedImage img = op.filter(glyphs.get(chars[x][y]), null);
                 offscreenGraphics.drawImage(img, x * GLYPH_WIDTH_IN_PIXELS, y * GLYPH_HEIGHT_IN_PIXELS, null);
 
                 oldBackgroundColors[x][y] = backgroundColors[x][y];
@@ -129,24 +123,6 @@ public class AsciiPanel extends JPanel {
         }
 
         g.drawImage(offscreenBuffer,0,0,this);
-    }
-
-    private void loadGlyphs() {
-        try {
-            glyphSprite = ImageIO.read(AsciiPanel.class.getResource("/cp437.png"));
-        } catch (IOException e) {
-            System.err.println("loadGlyphs(): " + e.getMessage());
-        }
-
-        for (int i = 0; i < 256; i++) {
-            int sx = (i % 32) * GLYPH_WIDTH_IN_PIXELS + 8;
-            int sy = (i / 32) * GLYPH_HEIGHT_IN_PIXELS + 8;
-
-            glyphs[i] = new BufferedImage(GLYPH_WIDTH_IN_PIXELS, GLYPH_HEIGHT_IN_PIXELS,
-                    BufferedImage.TYPE_INT_ARGB);
-            glyphs[i].getGraphics().drawImage(glyphSprite, 0, 0, GLYPH_WIDTH_IN_PIXELS,
-                    GLYPH_HEIGHT_IN_PIXELS, sx, sy, sx + GLYPH_WIDTH_IN_PIXELS, sy + GLYPH_HEIGHT_IN_PIXELS, null);
-        }
     }
 
     private LookupOp setColors(Color bgColor, Color fgColor) {
@@ -194,8 +170,8 @@ public class AsciiPanel extends JPanel {
     }
 
     public AsciiPanel clear(char character, int x, int y, int width, int height, DisplayColour foregroundColour, DisplayColour backgroundColour) {
-        if (character >= glyphs.length) {
-            throw new IllegalArgumentException("character " + character + " must be within range [0," + glyphs.length + "].");
+        if (character >= glyphs.size()) {
+            throw new IllegalArgumentException("character " + character + " must be within range [0," + glyphs.size() + "].");
         } else if (x < 0 || x >= widthInCharacters) {
             throw new IllegalArgumentException("x " + x + " must be within range [0," + widthInCharacters + ")");
         } else if (y < 0 || y >= heightInCharacters) {
@@ -220,15 +196,15 @@ public class AsciiPanel extends JPanel {
     }
 
     public AsciiPanel write(char character) {
-        return write(character, cursorX, cursorY, defaultForegroundColor, defaultBackgroundColor);
+        return write(character, cursor.x, cursor.y, defaultForegroundColor, defaultBackgroundColor);
     }
 
     public AsciiPanel write(char character, DisplayColour foregroundColour) {
-        return write(character, cursorX, cursorY, foregroundColour, defaultBackgroundColor);
+        return write(character, cursor.x, cursor.y, foregroundColour, defaultBackgroundColor);
     }
 
     public AsciiPanel write(char character, DisplayColour foregroundColour, DisplayColour backgroundColour) {
-        return write(character, cursorX, cursorY, foregroundColour, backgroundColour);
+        return write(character, cursor.x, cursor.y, foregroundColour, backgroundColour);
     }
 
     public AsciiPanel write(char character, int x, int y) {
@@ -240,8 +216,8 @@ public class AsciiPanel extends JPanel {
     }
 
     public AsciiPanel write(char character, int x, int y, DisplayColour foregroundColour, DisplayColour backgroundColour) {
-        if (character >= glyphs.length) {
-            throw new IllegalArgumentException("character " + character + " must be within range [0," + glyphs.length + "].");
+        if (character >= glyphs.size()) {
+            throw new IllegalArgumentException("character " + character + " must be within range [0," + glyphs.size() + "].");
         }
 
         if (x < 0 || x >= widthInCharacters) {
@@ -264,15 +240,15 @@ public class AsciiPanel extends JPanel {
     }
 
     public AsciiPanel write(String string) {
-        return write(string, cursorX, cursorY, defaultForegroundColor, defaultBackgroundColor);
+        return write(string, cursor.x, cursor.y, defaultForegroundColor, defaultBackgroundColor);
     }
 
     public AsciiPanel write(String string, DisplayColour foregroundColour) {
-        return write(string, cursorX, cursorY, foregroundColour, defaultBackgroundColor);
+        return write(string, cursor.x, cursor.y, foregroundColour, defaultBackgroundColor);
     }
 
     public AsciiPanel write(String string, DisplayColour foregroundColour, DisplayColour backgroundColour) {
-        return write(string, cursorX, cursorY, foregroundColour, backgroundColour);
+        return write(string, cursor.x, cursor.y, foregroundColour, backgroundColour);
     }
 
     public AsciiPanel write(String string, int x, int y) {
@@ -397,5 +373,4 @@ public class AsciiPanel extends JPanel {
     public int getLastMultilineY() {
         return lastMultilineY;
     }
-
 }

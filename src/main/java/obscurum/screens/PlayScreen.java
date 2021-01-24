@@ -41,12 +41,12 @@ public class PlayScreen extends Screen {
     public static final int STATS_TL_X = GAME_WIDTH - 1;
     public static final int STATS_TL_Y = 0;
     public static final int STATS_WIDTH =
-            GameMain.SCREEN_WIDTH - GAME_WIDTH + 1;
+            GameMain.SCREEN_WIDTH_IN_CHARACTERS - GAME_WIDTH + 1;
     public static final int STATS_HEIGHT = GAME_HEIGHT;
     public static final int LOG_TL_X = 0;
     public static final int LOG_TL_Y = GAME_HEIGHT - 1;
-    public static final int LOG_WIDTH = GameMain.SCREEN_WIDTH;
-    public static final int LOG_HEIGHT = GameMain.SCREEN_HEIGHT -
+    public static final int LOG_WIDTH = GameMain.SCREEN_WIDTH_IN_CHARACTERS;
+    public static final int LOG_HEIGHT = GameMain.SCREEN_HEIGHT_IN_CHARACTERS -
             GAME_HEIGHT + 1;
     public Screen subScreen;
     private CreatureFactory cf;
@@ -79,7 +79,7 @@ public class PlayScreen extends Screen {
                 Display.FG_WINDOW_FRAME, Display.BG_WINDOW_FRAME);
         terminal.write(Display.DV_DR_INTERSECT, LOG_TL_X, LOG_TL_Y,
                 Display.FG_WINDOW_FRAME, Display.BG_WINDOW_FRAME);
-        terminal.write(Display.DV_DL_INTERSECT, GameMain.SCREEN_WIDTH - 1,
+        terminal.write(Display.DV_DL_INTERSECT, GameMain.SCREEN_WIDTH_IN_CHARACTERS - 1,
                 LOG_TL_Y, Display.FG_WINDOW_FRAME, Display.BG_WINDOW_FRAME);
         terminal.write(Display.DH_DT_INTERSECT, GAME_WIDTH - 1,
                 GAME_HEIGHT - 1, Display.FG_WINDOW_FRAME, Display.BG_WINDOW_FRAME);

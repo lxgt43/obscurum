@@ -33,11 +33,11 @@ public class MainMenuScreen extends Screen {
             terminal.writeCenter(mainMenu[i], 3 + i, mainMenuColours[i]);
         }
         terminal.writeCenter("Press [enter] to start a new game.",
-                GameMain.SCREEN_HEIGHT - 9);
+                GameMain.SCREEN_HEIGHT_IN_CHARACTERS - 9);
         terminal.writeCenter("Press [e] to start the game editor.",
-                GameMain.SCREEN_HEIGHT - 7);
+                GameMain.SCREEN_HEIGHT_IN_CHARACTERS - 7);
         terminal.writeCenter("Press [q] to quit the program.",
-                GameMain.SCREEN_HEIGHT - 5);
+                GameMain.SCREEN_HEIGHT_IN_CHARACTERS - 5);
     }
 
     @Override

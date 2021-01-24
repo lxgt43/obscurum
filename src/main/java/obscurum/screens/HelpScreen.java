@@ -152,7 +152,7 @@ public class HelpScreen extends Screen {
       line++;
     }
     terminal.writeCenter("Press [esc] to go back.",
-        GameMain.SCREEN_HEIGHT - 5);
+        GameMain.SCREEN_HEIGHT_IN_CHARACTERS - 5);
   }
 
   @Override
