@@ -523,12 +523,10 @@ public class DepictionGenerator {
 
         if (usedFeatures[9]) {
             for (int i = 0; i < bladeHeight; i += 2) {
-                Color qualityColour = Display.QUALITY_COLOURS[item.getQuality()];
-                blade[i][bladeWidth / 2] =
-                        new DisplayTile(DisplayCharacter.ASTERISK, DisplayColour.fromRgb("Colour", qualityColour.getRed(), qualityColour.getGreen(), qualityColour.getBlue()));
+                DisplayColour qualityColour = Display.QUALITY_COLOURS[item.getQuality()];
+                blade[i][bladeWidth / 2] = new DisplayTile(DisplayCharacter.ASTERISK, qualityColour);
                 if (bladeWidth % 2 == 0) {
-                    blade[i][bladeWidth / 2 - 1] =
-                            new DisplayTile(DisplayCharacter.ASTERISK, DisplayColour.fromRgb("Colour", qualityColour.getRed(), qualityColour.getGreen(), qualityColour.getBlue()));
+                    blade[i][bladeWidth / 2 - 1] = new DisplayTile(DisplayCharacter.ASTERISK, qualityColour);
                 }
             }
         }

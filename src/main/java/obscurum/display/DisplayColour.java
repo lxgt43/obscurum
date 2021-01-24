@@ -33,4 +33,12 @@ public class DisplayColour {
     public static DisplayColour fromRgb(String name, int red, int green, int blue) {
         return new DisplayColour(name, new Color(red, green, blue));
     }
+
+    public static DisplayColour fromRgba(String name, int red, int green, int blue, int alpha) {
+        return new DisplayColour(name, new Color(red, green, blue, alpha));
+    }
+
+    public static DisplayColour fromColor(Color color) {
+        return new DisplayColour("", color);
+    }
 }
