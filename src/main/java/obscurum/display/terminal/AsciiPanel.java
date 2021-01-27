@@ -1,7 +1,9 @@
 package obscurum.display.terminal;
 
 import lombok.NonNull;
+import obscurum.display.DisplayCharacter;
 import obscurum.display.DisplayColour;
+import obscurum.display.DisplayTile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +11,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ByteLookupTable;
 import java.awt.image.LookupOp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JPanel;
 
 public class AsciiPanel extends JPanel {
@@ -27,12 +31,7 @@ public class AsciiPanel extends JPanel {
     private Graphics offscreenGraphics;
     private final Point cursor = new Point(0, 0);
     private final List<BufferedImage> glyphs;
-    private final char[][] chars;
-    private final Color[][] backgroundColors;
-    private final Color[][] foregroundColors;
-    private final char[][] oldChars;
-    private final Color[][] oldBackgroundColors;
-    private final Color[][] oldForegroundColors;
+    private final Map<Point, DisplayTile> display;
 
     private int lastMultilineX;
     private int lastMultilineY;
@@ -56,19 +55,17 @@ public class AsciiPanel extends JPanel {
         this.widthInCharacters = widthInCharacters;
         this.heightInCharacters = heightInCharacters;
         this.glyphs = glyphs;
-        setPreferredSize(panelSize);
-
         this.defaultBackgroundColor = defaultBackgroundColor;
         this.defaultForegroundColor = defaultForegroundColor;
+        setPreferredSize(panelSize);
 
-        // These three fields should make up a list of DisplayTiles
-        chars = new char[this.widthInCharacters][this.heightInCharacters];
-        backgroundColors = new Color[this.widthInCharacters][this.heightInCharacters];
-        foregroundColors = new Color[this.widthInCharacters][this.heightInCharacters];
+        this.display = new HashMap<>();
 
-        oldChars = new char[this.widthInCharacters][this.heightInCharacters];
-        oldBackgroundColors = new Color[this.widthInCharacters][this.heightInCharacters];
-        oldForegroundColors = new Color[this.widthInCharacters][this.heightInCharacters];
+        for (int x = 0; x < this.widthInCharacters; x++) {
+            for (int y = 0; y < this.heightInCharacters; y++) {
+                this.display.put(new Point(x, y), new DisplayTile(DisplayCharacter.SPACE, this.defaultForegroundColor, this.defaultBackgroundColor));
+            }
+        }
     }
 
     private void setCursorX(int cursorX) {
@@ -102,25 +99,11 @@ public class AsciiPanel extends JPanel {
             offscreenGraphics = offscreenBuffer.getGraphics();
         }
 
-        for (int x = 0; x < widthInCharacters; x++) {
-            for (int y = 0; y < heightInCharacters; y++) {
-                if (oldBackgroundColors[x][y] == backgroundColors[x][y]
-                        && oldForegroundColors[x][y] == foregroundColors[x][y]
-                        && oldChars[x][y] == chars[x][y])
-                    continue;
-
-                Color bg = backgroundColors[x][y];
-                Color fg = foregroundColors[x][y];
-
-                LookupOp op = setColors(bg, fg);
-                BufferedImage img = op.filter(glyphs.get(chars[x][y]), null);
-                offscreenGraphics.drawImage(img, x * GLYPH_WIDTH_IN_PIXELS, y * GLYPH_HEIGHT_IN_PIXELS, null);
-
-                oldBackgroundColors[x][y] = backgroundColors[x][y];
-                oldForegroundColors[x][y] = foregroundColors[x][y];
-                oldChars[x][y] = chars[x][y];
-            }
-        }
+        display.forEach((point, tile) -> {
+            LookupOp lookupOp = setColors(tile.getBackgroundColour().getColour(), tile.getForegroundColour().getColour());
+            BufferedImage glyphImage = lookupOp.filter(glyphs.get(tile.getDisplayCharacter().getCharacter()), null);
+            offscreenGraphics.drawImage(glyphImage, point.x * GLYPH_WIDTH_IN_PIXELS, point.y * GLYPH_HEIGHT_IN_PIXELS, null);
+        });
 
         g.drawImage(offscreenBuffer,0,0,this);
     }
@@ -231,9 +214,8 @@ public class AsciiPanel extends JPanel {
         if (foregroundColour == null) foregroundColour = defaultForegroundColor;
         if (backgroundColour == null) backgroundColour = defaultBackgroundColor;
 
-        chars[x][y] = character;
-        foregroundColors[x][y] = foregroundColour.getColour();
-        backgroundColors[x][y] = backgroundColour.getColour();
+        display.put(new Point(x, y), new DisplayTile(DisplayCharacter.of(character), foregroundColour, backgroundColour));
+
         setCursorX((x + 1) % widthInCharacters);
         setCursorY(y);
         return this;
