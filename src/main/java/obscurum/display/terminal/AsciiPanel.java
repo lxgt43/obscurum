@@ -4,8 +4,6 @@ import lombok.NonNull;
 import obscurum.display.DisplayCharacter;
 import obscurum.display.DisplayColour;
 import obscurum.display.DisplayTile;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -18,8 +16,6 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 public class AsciiPanel extends JPanel {
-    private static final Logger log = LoggerFactory.getLogger(AsciiPanel.class);
-
     public static final int NUM_OF_GLYPHS = 256;
 
     private static final int GLYPH_WIDTH_IN_PIXELS = 9;
