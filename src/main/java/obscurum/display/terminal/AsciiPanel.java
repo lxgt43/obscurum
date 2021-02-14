@@ -27,6 +27,7 @@ public class AsciiPanel extends JPanel {
 
     private final int widthInCharacters;
     private final int heightInCharacters;
+    private final String boundsDisplay;
     private final DisplayColour defaultBackgroundColor;
     private final DisplayColour defaultForegroundColor;
 
@@ -56,6 +57,7 @@ public class AsciiPanel extends JPanel {
 
         this.widthInCharacters = widthInCharacters;
         this.heightInCharacters = heightInCharacters;
+        this.boundsDisplay = String.format("[x: (0, %d), y: (0, %d)]", widthInCharacters, heightInCharacters);
         this.glyphs = glyphs;
         this.defaultBackgroundColor = defaultBackgroundColor;
         this.defaultForegroundColor = defaultForegroundColor;
@@ -106,35 +108,31 @@ public class AsciiPanel extends JPanel {
     }
 
     public void clear() {
-        clear(' ', 0, 0, widthInCharacters, heightInCharacters, defaultForegroundColor, defaultBackgroundColor);
+        clear(' ', new Point(0, 0), new Point(widthInCharacters, heightInCharacters), defaultForegroundColor, defaultBackgroundColor);
     }
 
-    public void clear(char character, int x, int y, int width, int height) {
-        clear(character, x, y, width, height, defaultForegroundColor, defaultBackgroundColor);
+    public void clear(char character, @NonNull Point topLeftCorner, @NonNull Point bottomRightCorner) {
+        clear(character, topLeftCorner, bottomRightCorner, defaultForegroundColor, defaultBackgroundColor);
     }
 
-    public void clear(char character, int x, int y, int width, int height, DisplayColour foregroundColour, DisplayColour backgroundColour) {
+    public void clear(char character, @NonNull Point topLeftCorner, @NonNull Point bottomRightCorner, @NonNull DisplayColour foregroundColour, @NonNull DisplayColour backgroundColour) {
         if (character >= glyphs.size()) {
             throw new IllegalArgumentException("character " + character + " must be within range [0," + glyphs.size() + "].");
-        } else if (x < 0 || x >= widthInCharacters) {
-            throw new IllegalArgumentException("x " + x + " must be within range [0," + widthInCharacters + ")");
-        } else if (y < 0 || y >= heightInCharacters) {
-            throw new IllegalArgumentException("y " + y + " must be within range [0," + heightInCharacters + ")");
-        } else if (width < 1) {
-            throw new IllegalArgumentException("width " + width + " must be greater than 0.");
-        } else if (height < 1) {
-            throw new IllegalArgumentException("height " + height + " must be greater than 0.");
-        } else if (x + width > widthInCharacters) {
-            throw new IllegalArgumentException("x + width " + (x + width) + " must be less than " + (widthInCharacters + 1) + ".");
-        } else if (y + height > heightInCharacters) {
-            throw new IllegalArgumentException("y + height " + (y + height) + " must be less than " + (heightInCharacters + 1) + ".");
+        } else if (!isInBounds(topLeftCorner)) {
+            throw new IllegalArgumentException(String.format("Top left corner %s must be within bounds %s", topLeftCorner, boundsDisplay));
+        } else if (!isInBounds(bottomRightCorner)) {
+            throw new IllegalArgumentException(String.format("Bottom right corner %s must be within bounds %s", topLeftCorner, boundsDisplay));
         }
 
-        for (int xo = x; xo < x + width; xo++) {
-            for (int yo = y; yo < y + height; yo++) {
-                write(character, xo, yo, foregroundColour, backgroundColour);
+        for (int x = topLeftCorner.x; x < bottomRightCorner.x; x++) {
+            for (int y = topLeftCorner.y; y < bottomRightCorner.y; y++) {
+                write(character, x, y, foregroundColour, backgroundColour);
             }
         }
+    }
+
+    public boolean isInBounds(@NonNull Point point) {
+        return (0 <= point.x && point.x <= widthInCharacters) && (0 <= point.y && point.y <= heightInCharacters);
     }
 
     public void write(char character, int x, int y, DisplayColour foregroundColour) {

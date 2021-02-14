@@ -76,7 +76,7 @@ public class CharacterScreen extends Screen {
                 terminal.write(displayItem.getGlyph(), tlX + 3, tlY + 2, DisplayColour.fromColor(displayItem.getColour()));
                 drawBorders(terminal, new Point(tlX + 1, tlY + 1), EQUIPMENT_SLOT_WIDTH - 2, EQUIPMENT_SLOT_HEIGHT - 2, true, quality, DisplayColour.BLACK);
             } else {
-                terminal.clear(' ', tlX + 1, tlY + 1, 3, 3);
+                terminal.clear(' ', new Point(tlX + 1, tlY + 1), new Point(tlX + 4, tlY + 4));
             }
         }
     }

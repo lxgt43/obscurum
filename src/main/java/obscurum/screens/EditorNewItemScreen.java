@@ -77,7 +77,7 @@ public class EditorNewItemScreen extends SubScreen {
 
     @Override
     public void displayOutput(AsciiPanel terminal) {
-        terminal.clear(' ', topLeft.x + 1, topLeft.y + 1, width - 1, height - 1);
+        terminal.clear(' ', new Point(topLeft.x + 1, topLeft.y + 1), new Point(topLeft.x + width, topLeft.y + height));
         drawBorders(terminal, topLeft, width, height);
         writeCentre(terminal, "Create a new object", 1);
         writeHorizontalLine(terminal, 2);
