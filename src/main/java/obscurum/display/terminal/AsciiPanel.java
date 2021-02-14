@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ByteLookupTable;
 import java.awt.image.LookupOp;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,8 @@ import javax.swing.JPanel;
 
 public class AsciiPanel extends JPanel {
     private static final Logger log = LoggerFactory.getLogger(AsciiPanel.class);
+
+    public static final int NUM_OF_GLYPHS = 256;
 
     private static final int GLYPH_WIDTH_IN_PIXELS = 9;
     private static final int GLYPH_HEIGHT_IN_PIXELS = 16;
@@ -80,7 +83,7 @@ public class AsciiPanel extends JPanel {
         }
 
         display.forEach((point, tile) -> {
-            LookupOp lookupOp = setColors(tile.getBackgroundColour(), tile.getForegroundColour());
+            LookupOp lookupOp = getLookupOp(tile.getBackgroundColour(), tile.getForegroundColour());
             BufferedImage glyphImage = lookupOp.filter(glyphs.get(tile.getDisplayCharacter().getCharacter()), null);
             offscreenGraphics.drawImage(glyphImage, point.x * GLYPH_WIDTH_IN_PIXELS, point.y * GLYPH_HEIGHT_IN_PIXELS, null);
         });
@@ -88,39 +91,18 @@ public class AsciiPanel extends JPanel {
         g.drawImage(offscreenBuffer,0,0,this);
     }
 
-    private LookupOp setColors(DisplayColour backgroundColour, DisplayColour foregroundColour) {
-        Color background = backgroundColour.getColour();
-        Color foreground = foregroundColour.getColour();
+    private LookupOp getLookupOp(@NonNull DisplayColour backgroundColour, @NonNull DisplayColour foregroundColour) {
+        List<Integer> backgroundComponents = backgroundColour.getComponents();
+        List<Integer> foregroundComponents = foregroundColour.getComponents();
+        int numOfColourComponents = backgroundComponents.size();
 
-        byte[] a = new byte[256];
-        byte[] r = new byte[256];
-        byte[] g = new byte[256];
-        byte[] b = new byte[256];
-
-        byte bgr = (byte) (background.getRed());
-        byte bgg = (byte) (background.getGreen());
-        byte bgb = (byte) (background.getBlue());
-
-        byte fgr = (byte) (foreground.getRed());
-        byte fgg = (byte) (foreground.getGreen());
-        byte fgb = (byte) (foreground.getBlue());
-
-        for (int i = 0; i < 256; i++) {
-            if (i == 0) {
-                a[i] = (byte) 255;
-                r[i] = bgr;
-                g[i] = bgg;
-                b[i] = bgb;
-            } else {
-                a[i] = (byte) 255;
-                r[i] = fgr;
-                g[i] = fgg;
-                b[i] = fgb;
-            }
+        byte[][] lookupTable = new byte[numOfColourComponents][NUM_OF_GLYPHS];
+        for (int i = 0; i < numOfColourComponents; i++) {
+            Arrays.fill(lookupTable[i], foregroundComponents.get(i).byteValue());
+            lookupTable[i][0] = backgroundComponents.get(i).byteValue();
         }
 
-        byte[][] table = {r, g, b, a};
-        return new LookupOp(new ByteLookupTable(0, table), null);
+        return new LookupOp(new ByteLookupTable(0, lookupTable), null);
     }
 
     public void clear() {

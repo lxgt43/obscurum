@@ -24,7 +24,6 @@ public class GameMain extends JFrame implements KeyListener {
 
     public static final int SCREEN_WIDTH_IN_CHARACTERS = 110;
     public static final int SCREEN_HEIGHT_IN_CHARACTERS = 29;
-    public static final int NUM_OF_GLYPHS = 256;
     private static final int GLYPH_WIDTH_IN_PIXELS = 9;
     private static final int GLYPH_HEIGHT_IN_PIXELS = 16;
     public static final String GLYPHS_FILE_PATH = "/cp437.png";

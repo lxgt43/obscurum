@@ -1,10 +1,9 @@
 package obscurum.items;
 
 import java.awt.Color;
-import obscurum.GameMain;
+
 import obscurum.creatures.Creature;
-import obscurum.items.Inventory;
-import obscurum.placeholders.NullItem;
+import obscurum.display.terminal.AsciiPanel;
 
 /**
  * This models an item, which can be found in a creature's inventory and used
@@ -44,9 +43,9 @@ public abstract class Item {
     if (glyph == ' ') {
       throw new IllegalArgumentException("Glyph cannot be empty.");
     }
-    if (glyph < 0 || glyph >= GameMain.NUM_OF_GLYPHS) {
+    if (glyph < 0 || glyph >= AsciiPanel.NUM_OF_GLYPHS) {
       throw new IllegalArgumentException("Glyph must be in range 0 - " +
-          GameMain.NUM_OF_GLYPHS + ".");
+          AsciiPanel.NUM_OF_GLYPHS + ".");
     }
     if (colour == null) {
       throw new IllegalArgumentException("Colour cannot be null.");

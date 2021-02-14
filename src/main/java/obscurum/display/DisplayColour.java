@@ -4,7 +4,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.awt.*;
+import java.awt.Color;
+import java.util.Arrays;
+import java.util.List;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE) @Getter
 public class DisplayColour {
@@ -40,5 +42,9 @@ public class DisplayColour {
 
     public static DisplayColour fromColor(Color color) {
         return new DisplayColour("", color);
+    }
+
+    public List<Integer> getComponents() {
+        return Arrays.asList(colour.getRed(), colour.getGreen(), colour.getBlue(), colour.getAlpha());
     }
 }
