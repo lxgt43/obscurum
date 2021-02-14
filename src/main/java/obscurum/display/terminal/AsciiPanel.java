@@ -1,331 +1,178 @@
 package obscurum.display.terminal;
 
+import lombok.NonNull;
+import obscurum.display.DisplayCharacter;
 import obscurum.display.DisplayColour;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import obscurum.display.DisplayTile;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ByteLookupTable;
 import java.awt.image.LookupOp;
-import java.io.IOException;
-import javax.imageio.ImageIO;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.swing.JPanel;
 
 public class AsciiPanel extends JPanel {
-    private static final Logger log = LoggerFactory.getLogger(AsciiPanel.class);
+    public static final int NUM_OF_GLYPHS = 256;
 
     private static final int GLYPH_WIDTH_IN_PIXELS = 9;
     private static final int GLYPH_HEIGHT_IN_PIXELS = 16;
 
     private final int widthInCharacters;
     private final int heightInCharacters;
+    private final String boundsDisplay;
     private final DisplayColour defaultBackgroundColor;
     private final DisplayColour defaultForegroundColor;
 
     private Image offscreenBuffer;
     private Graphics offscreenGraphics;
-    private int cursorX;
-    private int cursorY;
-    private BufferedImage glyphSprite;
-    private final BufferedImage[] glyphs;
-    private final char[][] chars;
-    private final Color[][] backgroundColors;
-    private final Color[][] foregroundColors;
-    private final char[][] oldChars;
-    private final Color[][] oldBackgroundColors;
-    private final Color[][] oldForegroundColors;
+    private final Point cursor = new Point(0, 0);
+    private final List<BufferedImage> glyphs;
+    private final Map<Point, DisplayTile> display;
 
-    private int lastMultilineX;
     private int lastMultilineY;
 
-    public AsciiPanel() {
-        this(80, 24);
-    }
-
-    public AsciiPanel(int width, int height) {
+    public AsciiPanel(int widthInCharacters,
+                      int heightInCharacters,
+                      @NonNull List<BufferedImage> glyphs,
+                      @NonNull Dimension panelSize,
+                      @NonNull DisplayColour defaultBackgroundColor,
+                      @NonNull DisplayColour defaultForegroundColor) {
         super();
 
-        if (width < 1)  {
-            throw new IllegalArgumentException("width " + width + " must be greater than 0.");
-        } else if (height < 1) {
-            throw new IllegalArgumentException("height " + height + " must be greater than 0.");
+        if (widthInCharacters < 1)  {
+            throw new IllegalArgumentException(String.format("Width must be greater than 0, but %d provided", widthInCharacters));
+        } else if (heightInCharacters < 1) {
+            throw new IllegalArgumentException(String.format("Height must be greater than 0, but %d provided", heightInCharacters));
+        } else if (glyphs.isEmpty()) {
+            throw new IllegalArgumentException("Glyphs list cannot be empty");
         }
 
-        widthInCharacters = width;
-        heightInCharacters = height;
-        setPreferredSize(new Dimension(GLYPH_WIDTH_IN_PIXELS * widthInCharacters, GLYPH_HEIGHT_IN_PIXELS * heightInCharacters));
+        this.widthInCharacters = widthInCharacters;
+        this.heightInCharacters = heightInCharacters;
+        this.boundsDisplay = String.format("[x: (0, %d), y: (0, %d)]", widthInCharacters, heightInCharacters);
+        this.glyphs = glyphs;
+        this.defaultBackgroundColor = defaultBackgroundColor;
+        this.defaultForegroundColor = defaultForegroundColor;
+        setPreferredSize(panelSize);
 
-        defaultBackgroundColor = DisplayColour.BLACK;
-        defaultForegroundColor = DisplayColour.WHITE;
+        this.display = new HashMap<>();
 
-        chars = new char[widthInCharacters][heightInCharacters];
-        backgroundColors = new Color[widthInCharacters][heightInCharacters];
-        foregroundColors = new Color[widthInCharacters][heightInCharacters];
-
-        oldChars = new char[widthInCharacters][heightInCharacters];
-        oldBackgroundColors = new Color[widthInCharacters][heightInCharacters];
-        oldForegroundColors = new Color[widthInCharacters][heightInCharacters];
-
-        glyphs = new BufferedImage[256];
-
-        loadGlyphs();
-
-        AsciiPanel.this.clear();
-    }
-
-    private void setCursorX(int cursorX) {
-        if (cursorX < 0 || cursorX >= widthInCharacters) {
-            throw new IllegalArgumentException("cursorX " + cursorX + " must be within range [0," + widthInCharacters + ").");
+        for (int x = 0; x < this.widthInCharacters; x++) {
+            for (int y = 0; y < this.heightInCharacters; y++) {
+                this.display.put(new Point(x, y), new DisplayTile(DisplayCharacter.SPACE, this.defaultForegroundColor, this.defaultBackgroundColor));
+            }
         }
-
-        this.cursorX = cursorX;
-    }
-
-    private void setCursorY(int cursorY) {
-        if (cursorY < 0 || cursorY >= heightInCharacters) {
-            throw new IllegalArgumentException("cursorY " + cursorY + " must be within range [0," + heightInCharacters + ").");
-        }
-
-        this.cursorY = cursorY;
     }
 
     @Override
-    public void update(Graphics g) {
+    public void update(@NonNull Graphics g) {
         paint(g);
     }
 
     @Override
-    public void paint(Graphics g) {
-        if (g == null)
-            throw new NullPointerException();
-
-        if (offscreenBuffer == null){
+    public void paint(@NonNull Graphics g) {
+        if (offscreenBuffer == null) {
             offscreenBuffer = createImage(this.getWidth(), this.getHeight());
             offscreenGraphics = offscreenBuffer.getGraphics();
         }
 
-        for (int x = 0; x < widthInCharacters; x++) {
-            for (int y = 0; y < heightInCharacters; y++) {
-                if (oldBackgroundColors[x][y] == backgroundColors[x][y]
-                        && oldForegroundColors[x][y] == foregroundColors[x][y]
-                        && oldChars[x][y] == chars[x][y])
-                    continue;
-
-                Color bg = backgroundColors[x][y];
-                Color fg = foregroundColors[x][y];
-
-                LookupOp op = setColors(bg, fg);
-                BufferedImage img = op.filter(glyphs[chars[x][y]], null);
-                offscreenGraphics.drawImage(img, x * GLYPH_WIDTH_IN_PIXELS, y * GLYPH_HEIGHT_IN_PIXELS, null);
-
-                oldBackgroundColors[x][y] = backgroundColors[x][y];
-                oldForegroundColors[x][y] = foregroundColors[x][y];
-                oldChars[x][y] = chars[x][y];
-            }
-        }
+        display.forEach((point, tile) -> {
+            LookupOp lookupOp = getLookupOp(tile.getBackgroundColour(), tile.getForegroundColour());
+            BufferedImage glyphImage = lookupOp.filter(glyphs.get(tile.getDisplayCharacter().getCharacter()), null);
+            offscreenGraphics.drawImage(glyphImage, point.x * GLYPH_WIDTH_IN_PIXELS, point.y * GLYPH_HEIGHT_IN_PIXELS, null);
+        });
 
         g.drawImage(offscreenBuffer,0,0,this);
     }
 
-    private void loadGlyphs() {
-        try {
-            glyphSprite = ImageIO.read(AsciiPanel.class.getResource("/cp437.png"));
-        } catch (IOException e) {
-            System.err.println("loadGlyphs(): " + e.getMessage());
+    private LookupOp getLookupOp(@NonNull DisplayColour backgroundColour, @NonNull DisplayColour foregroundColour) {
+        List<Integer> backgroundComponents = backgroundColour.getComponents();
+        List<Integer> foregroundComponents = foregroundColour.getComponents();
+        int numOfColourComponents = backgroundComponents.size();
+
+        byte[][] lookupTable = new byte[numOfColourComponents][NUM_OF_GLYPHS];
+        for (int i = 0; i < numOfColourComponents; i++) {
+            Arrays.fill(lookupTable[i], foregroundComponents.get(i).byteValue());
+            lookupTable[i][0] = backgroundComponents.get(i).byteValue();
         }
 
-        for (int i = 0; i < 256; i++) {
-            int sx = (i % 32) * GLYPH_WIDTH_IN_PIXELS + 8;
-            int sy = (i / 32) * GLYPH_HEIGHT_IN_PIXELS + 8;
-
-            glyphs[i] = new BufferedImage(GLYPH_WIDTH_IN_PIXELS, GLYPH_HEIGHT_IN_PIXELS,
-                    BufferedImage.TYPE_INT_ARGB);
-            glyphs[i].getGraphics().drawImage(glyphSprite, 0, 0, GLYPH_WIDTH_IN_PIXELS,
-                    GLYPH_HEIGHT_IN_PIXELS, sx, sy, sx + GLYPH_WIDTH_IN_PIXELS, sy + GLYPH_HEIGHT_IN_PIXELS, null);
-        }
+        return new LookupOp(new ByteLookupTable(0, lookupTable), null);
     }
 
-    private LookupOp setColors(Color bgColor, Color fgColor) {
-        byte[] a = new byte[256];
-        byte[] r = new byte[256];
-        byte[] g = new byte[256];
-        byte[] b = new byte[256];
+    public void clear() {
+        clear(' ', new Point(0, 0), new Point(widthInCharacters, heightInCharacters), defaultForegroundColor, defaultBackgroundColor);
+    }
 
-        byte bgr = (byte) (bgColor.getRed());
-        byte bgg = (byte) (bgColor.getGreen());
-        byte bgb = (byte) (bgColor.getBlue());
+    public void clear(char character, @NonNull Point topLeftCorner, @NonNull Point bottomRightCorner) {
+        clear(character, topLeftCorner, bottomRightCorner, defaultForegroundColor, defaultBackgroundColor);
+    }
 
-        byte fgr = (byte) (fgColor.getRed());
-        byte fgg = (byte) (fgColor.getGreen());
-        byte fgb = (byte) (fgColor.getBlue());
+    public void clear(char character, @NonNull Point topLeftCorner, @NonNull Point bottomRightCorner, @NonNull DisplayColour foregroundColour, @NonNull DisplayColour backgroundColour) {
+        if (character >= glyphs.size()) {
+            throw new IllegalArgumentException("character " + character + " must be within range [0," + glyphs.size() + "].");
+        } else if (!isInBounds(topLeftCorner)) {
+            throw new IllegalArgumentException(String.format("Top left corner %s must be within bounds %s", topLeftCorner, boundsDisplay));
+        } else if (!isInBounds(bottomRightCorner)) {
+            throw new IllegalArgumentException(String.format("Bottom right corner %s must be within bounds %s", topLeftCorner, boundsDisplay));
+        }
 
-        for (int i = 0; i < 256; i++) {
-            if (i == 0) {
-                a[i] = (byte) 255;
-                r[i] = bgr;
-                g[i] = bgg;
-                b[i] = bgb;
-            } else {
-                a[i] = (byte) 255;
-                r[i] = fgr;
-                g[i] = fgg;
-                b[i] = fgb;
+        for (int x = topLeftCorner.x; x < bottomRightCorner.x; x++) {
+            for (int y = topLeftCorner.y; y < bottomRightCorner.y; y++) {
+                write(character, x, y, foregroundColour, backgroundColour);
             }
         }
-
-        byte[][] table = {r, g, b, a};
-        return new LookupOp(new ByteLookupTable(0, table), null);
     }
 
-    public AsciiPanel clear() {
-        return clear(' ', 0, 0, widthInCharacters, heightInCharacters, defaultForegroundColor, defaultBackgroundColor);
+    public boolean isInBounds(@NonNull Point point) {
+        return (0 <= point.x && point.x <= widthInCharacters) && (0 <= point.y && point.y <= heightInCharacters);
     }
 
-    public AsciiPanel clear(char character) {
-        return clear(character, 0, 0, widthInCharacters, heightInCharacters, defaultForegroundColor, defaultBackgroundColor);
+    public void write(char character, int x, int y, DisplayColour foregroundColour) {
+        write(character, x, y, foregroundColour, defaultBackgroundColor);
     }
 
-    public AsciiPanel clear(char character, int x, int y, int width, int height) {
-        return clear(character, x, y, width, height, defaultForegroundColor, defaultBackgroundColor);
-    }
-
-    public AsciiPanel clear(char character, int x, int y, int width, int height, DisplayColour foregroundColour, DisplayColour backgroundColour) {
-        if (character >= glyphs.length) {
-            throw new IllegalArgumentException("character " + character + " must be within range [0," + glyphs.length + "].");
+    public void write(char character, int x, int y, @NonNull DisplayColour foregroundColour, @NonNull DisplayColour backgroundColour) {
+        if (character >= glyphs.size()) {
+            throw new IllegalArgumentException("character " + character + " must be within range [0," + glyphs.size() + "].");
         } else if (x < 0 || x >= widthInCharacters) {
             throw new IllegalArgumentException("x " + x + " must be within range [0," + widthInCharacters + ")");
         } else if (y < 0 || y >= heightInCharacters) {
             throw new IllegalArgumentException("y " + y + " must be within range [0," + heightInCharacters + ")");
-        } else if (width < 1) {
-            throw new IllegalArgumentException("width " + width + " must be greater than 0.");
-        } else if (height < 1) {
-            throw new IllegalArgumentException("height " + height + " must be greater than 0.");
-        } else if (x + width > widthInCharacters) {
-            throw new IllegalArgumentException("x + width " + (x + width) + " must be less than " + (widthInCharacters + 1) + ".");
-        } else if (y + height > heightInCharacters) {
-            throw new IllegalArgumentException("y + height " + (y + height) + " must be less than " + (heightInCharacters + 1) + ".");
         }
 
-        for (int xo = x; xo < x + width; xo++) {
-            for (int yo = y; yo < y + height; yo++) {
-                write(character, xo, yo, foregroundColour, backgroundColour);
-            }
-        }
+        display.put(new Point(x, y), new DisplayTile(DisplayCharacter.of(character), foregroundColour, backgroundColour));
 
-        return this;
+        cursor.x = (x + 1) % widthInCharacters;
+        cursor.y = y;
     }
 
-    public AsciiPanel write(char character) {
-        return write(character, cursorX, cursorY, defaultForegroundColor, defaultBackgroundColor);
+    public void write(String string, int x, int y) {
+        write(string, x, y, defaultForegroundColor, defaultBackgroundColor);
     }
 
-    public AsciiPanel write(char character, DisplayColour foregroundColour) {
-        return write(character, cursorX, cursorY, foregroundColour, defaultBackgroundColor);
+    public void write(String string, int x, int y, DisplayColour foregroundColour) {
+        write(string, x, y, foregroundColour, defaultBackgroundColor);
     }
 
-    public AsciiPanel write(char character, DisplayColour foregroundColour, DisplayColour backgroundColour) {
-        return write(character, cursorX, cursorY, foregroundColour, backgroundColour);
-    }
-
-    public AsciiPanel write(char character, int x, int y) {
-        return write(character, x, y, defaultForegroundColor, defaultBackgroundColor);
-    }
-
-    public AsciiPanel write(char character, int x, int y, DisplayColour foregroundColour) {
-        return write(character, x, y, foregroundColour, defaultBackgroundColor);
-    }
-
-    public AsciiPanel write(char character, int x, int y, DisplayColour foregroundColour, DisplayColour backgroundColour) {
-        if (character >= glyphs.length) {
-            throw new IllegalArgumentException("character " + character + " must be within range [0," + glyphs.length + "].");
-        }
-
-        if (x < 0 || x >= widthInCharacters) {
-            throw new IllegalArgumentException("x " + x + " must be within range [0," + widthInCharacters + ")");
-        }
-
-        if (y < 0 || y >= heightInCharacters) {
-            throw new IllegalArgumentException("y " + y + " must be within range [0," + heightInCharacters + ")");
-        }
-
-        if (foregroundColour == null) foregroundColour = defaultForegroundColor;
-        if (backgroundColour == null) backgroundColour = defaultBackgroundColor;
-
-        chars[x][y] = character;
-        foregroundColors[x][y] = foregroundColour.getColour();
-        backgroundColors[x][y] = backgroundColour.getColour();
-        setCursorX((x + 1) % widthInCharacters);
-        setCursorY(y);
-        return this;
-    }
-
-    public AsciiPanel write(String string) {
-        return write(string, cursorX, cursorY, defaultForegroundColor, defaultBackgroundColor);
-    }
-
-    public AsciiPanel write(String string, DisplayColour foregroundColour) {
-        return write(string, cursorX, cursorY, foregroundColour, defaultBackgroundColor);
-    }
-
-    public AsciiPanel write(String string, DisplayColour foregroundColour, DisplayColour backgroundColour) {
-        return write(string, cursorX, cursorY, foregroundColour, backgroundColour);
-    }
-
-    public AsciiPanel write(String string, int x, int y) {
-        return write(string, x, y, defaultForegroundColor, defaultBackgroundColor);
-    }
-
-    public AsciiPanel write(String string, int x, int y, DisplayColour foregroundColour) {
-        return write(string, x, y, foregroundColour, defaultBackgroundColor);
-    }
-
-    public AsciiPanel write(String string, int x, int y, DisplayColour foregroundColour, DisplayColour backgroundColour) {
-        if (string == null) {
-            throw new NullPointerException("string must not be null.");
-        } else if (x + string.length() >= widthInCharacters) {
-            throw new IllegalArgumentException("x + string.length() " + (x + string.length()) + " must be less than " + widthInCharacters + ".");
-        } else if (x < 0 || x >= widthInCharacters) {
-            throw new IllegalArgumentException("x " + x + " must be within range [0," + widthInCharacters + ").");
-        } else if (y < 0 || y >= heightInCharacters) {
-            throw new IllegalArgumentException("y " + y + " must be within range [0," + heightInCharacters + ").");
-        }
-
-        if (foregroundColour == null) {
-            foregroundColour = defaultForegroundColor;
-        }
-
-        if (backgroundColour == null) {
-            backgroundColour = defaultBackgroundColor;
-        }
-
+    public void write(@NonNull String string, int x, int y, DisplayColour foregroundColour, DisplayColour backgroundColour) {
         for (int i = 0; i < string.length(); i++) {
             write(string.charAt(i), x + i, y, foregroundColour, backgroundColour);
         }
-
-        return this;
     }
 
-    public void writeCenter(String string, int y) {
-        writeCenter(string, y, defaultForegroundColor, defaultBackgroundColor);
+    public void writeCentred(String string, int y) {
+        writeCentred(string, y, defaultForegroundColor, defaultBackgroundColor);
     }
 
-    public void writeCenter(String string, int y, DisplayColour foregroundColour) {
-        writeCenter(string, y, foregroundColour, defaultBackgroundColor);
+    public void writeCentred(String string, int y, DisplayColour foregroundColour) {
+        writeCentred(string, y, foregroundColour, defaultBackgroundColor);
     }
 
-    public void writeCenter(String string, int y, DisplayColour foregroundColour, DisplayColour backgroundColour) {
-        if (string == null) {
-            throw new NullPointerException("string must not be null.");
-        } else if (string.length() >= widthInCharacters) {
-            throw new IllegalArgumentException("string.length() " + string.length() + " must be less than " + widthInCharacters + ".");
-        } else if (y < 0 || y >= heightInCharacters) {
-            throw new IllegalArgumentException("y " + y + " must be within range [0," + heightInCharacters + ").");
-        }
-
+    public void writeCentred(@NonNull String string, int y, DisplayColour foregroundColour, DisplayColour backgroundColour) {
         int x = (widthInCharacters - string.length()) / 2;
 
         for (int i = 0; i < string.length(); i++) {
@@ -337,10 +184,6 @@ public class AsciiPanel extends JPanel {
         writeMultiline(string, x, y, widthInCharacters, heightInCharacters, defaultForegroundColor, defaultBackgroundColor);
     }
 
-    public void writeMultiline(String string, int x, int y, DisplayColour foregroundColour) {
-        writeMultiline(string, x, y, widthInCharacters, heightInCharacters, foregroundColour, defaultBackgroundColor);
-    }
-
     public void writeMultiline(String string, int x, int y, int xBound, int yBound) {
         writeMultiline(string, x, y, xBound, yBound, defaultForegroundColor, defaultBackgroundColor);
     }
@@ -350,10 +193,8 @@ public class AsciiPanel extends JPanel {
         writeMultiline(string, x, y, xBound, yBound, foregroundColour, defaultBackgroundColor);
     }
 
-    public void writeMultiline(String string, int x, int y, int xBound, int yBound, DisplayColour foregroundColour, DisplayColour backgroundColour) {
-        if (string == null) {
-            throw new NullPointerException("string must not be null");
-        } else if (x > xBound || y > yBound) {
+    public void writeMultiline(@NonNull String string, int x, int y, int xBound, int yBound, DisplayColour foregroundColour, DisplayColour backgroundColour) {
+        if (x > xBound || y > yBound) {
             throw new IllegalArgumentException("Top left coordinates must be less than the bound coordinates.");
         } else if (x > widthInCharacters || xBound > widthInCharacters || y > heightInCharacters || yBound > heightInCharacters) {
             throw new IllegalArgumentException("Arguments exceed terminal size.");
@@ -386,16 +227,10 @@ public class AsciiPanel extends JPanel {
             write(words[i], currentX, currentY, foregroundColour, backgroundColour);
             currentX += words[i].length();
         }
-        lastMultilineX = currentX;
         lastMultilineY = currentY;
-    }
-
-    public int getLastMultilineX() {
-        return lastMultilineX;
     }
 
     public int getLastMultilineY() {
         return lastMultilineY;
     }
-
 }

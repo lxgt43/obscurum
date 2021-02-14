@@ -1,6 +1,5 @@
 package obscurum.screens;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 
@@ -24,7 +23,7 @@ public class CharacterScreen extends Screen {
     private static final int EQUIPMENT_TL_X = 0;
     private static final int EQUIPMENT_TL_Y = 0;
     private static final int EQUIPMENT_WIDTH = 38;
-    private static final int EQUIPMENT_HEIGHT = GameMain.SCREEN_HEIGHT;
+    private static final int EQUIPMENT_HEIGHT = GameMain.SCREEN_HEIGHT_IN_CHARACTERS;
     private static final int SELECTED_ITEM_TL_X = EQUIPMENT_WIDTH - 1;
     private static final int SELECTED_ITEM_TL_Y = 0;
     private static final int SELECTED_ITEM_WIDTH = 22;
@@ -33,7 +32,7 @@ public class CharacterScreen extends Screen {
             EQUIPMENT_WIDTH + SELECTED_ITEM_WIDTH - 2;
     private static final int ATTRIBUTES_TL_Y = 0;
     private static final int ATTRIBUTES_WIDTH =
-            GameMain.SCREEN_WIDTH - EQUIPMENT_WIDTH - SELECTED_ITEM_WIDTH + 2;
+            GameMain.SCREEN_WIDTH_IN_CHARACTERS - EQUIPMENT_WIDTH - SELECTED_ITEM_WIDTH + 2;
     private static final int ATTRIBUTES_HEIGHT = EQUIPMENT_HEIGHT;
     private static final int EQUIPMENT_SLOT_COUNT = Equipment.FEET + 1;
     private static final int EQUIPMENT_SLOT_WIDTH = 7;
@@ -77,7 +76,7 @@ public class CharacterScreen extends Screen {
                 terminal.write(displayItem.getGlyph(), tlX + 3, tlY + 2, DisplayColour.fromColor(displayItem.getColour()));
                 drawBorders(terminal, new Point(tlX + 1, tlY + 1), EQUIPMENT_SLOT_WIDTH - 2, EQUIPMENT_SLOT_HEIGHT - 2, true, quality, DisplayColour.BLACK);
             } else {
-                terminal.clear(' ', tlX + 1, tlY + 1, 3, 3);
+                terminal.clear(' ', new Point(tlX + 1, tlY + 1), new Point(tlX + 4, tlY + 4));
             }
         }
     }

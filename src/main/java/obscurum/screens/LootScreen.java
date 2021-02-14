@@ -1,5 +1,6 @@
 package obscurum.screens;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.lang.Math;
 import java.util.ArrayList;
@@ -89,7 +90,7 @@ public class LootScreen extends SubScreen {
   public void displayOutput(AsciiPanel terminal) {
     String title = corpse.isAlive() ? corpse.getName() :
         corpse.getName() + " Corpse";
-    terminal.clear(' ', topLeft.x + 1, topLeft.y + 1, width - 1, height - 1);
+    terminal.clear(' ', new Point(topLeft.x + 1, topLeft.y + 1), new Point(topLeft.x + width, topLeft.y + height));
     drawBorders(terminal, topLeft, width, height);
     writeCentre(terminal, title, 1);
     writeHorizontalLine(terminal, 2);

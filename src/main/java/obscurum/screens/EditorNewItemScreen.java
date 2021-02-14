@@ -71,13 +71,13 @@ public class EditorNewItemScreen extends SubScreen {
 
     @Override
     protected void computeTopLeft() {
-        topLeft = new Point(GameMain.SCREEN_WIDTH / 2 - width / 2,
-                GameMain.SCREEN_HEIGHT / 2 - height / 2);
+        topLeft = new Point(GameMain.SCREEN_WIDTH_IN_CHARACTERS / 2 - width / 2,
+                GameMain.SCREEN_HEIGHT_IN_CHARACTERS / 2 - height / 2);
     }
 
     @Override
     public void displayOutput(AsciiPanel terminal) {
-        terminal.clear(' ', topLeft.x + 1, topLeft.y + 1, width - 1, height - 1);
+        terminal.clear(' ', new Point(topLeft.x + 1, topLeft.y + 1), new Point(topLeft.x + width, topLeft.y + height));
         drawBorders(terminal, topLeft, width, height);
         writeCentre(terminal, "Create a new object", 1);
         writeHorizontalLine(terminal, 2);

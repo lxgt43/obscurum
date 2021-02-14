@@ -60,11 +60,11 @@ public abstract class SubScreen extends Screen {
   protected void computeTopLeft() {
     int x = player.getScreenLocation().x + 2;
     int y = Math.max(1, Math.min(player.getScreenLocation().y - 3,
-        GameMain.SCREEN_HEIGHT - height - 4)); // should remove the -3 later
+        GameMain.SCREEN_HEIGHT_IN_CHARACTERS - height - 4)); // should remove the -3 later
         //it prevents the screen from overlapping with the help lines below
         //the board, but these will be removed later
 
-    if (x + width >= GameMain.SCREEN_WIDTH - 1) {
+    if (x + width >= GameMain.SCREEN_WIDTH_IN_CHARACTERS - 1) {
       x = player.getScreenLocation().x - width - 2;
     }
     topLeft = new Point(x, y);

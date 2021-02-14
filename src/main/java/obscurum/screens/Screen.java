@@ -1,6 +1,5 @@
 package obscurum.screens;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.io.*;
@@ -81,16 +80,16 @@ public abstract class Screen {
         }
         if (!isInBounds(topLeft)) {
             throw new IllegalArgumentException("Top left corner must be between " +
-                    "(0, 0) and (" + GameMain.SCREEN_WIDTH + ", " + GameMain.SCREEN_HEIGHT +
+                    "(0, 0) and (" + GameMain.SCREEN_WIDTH_IN_CHARACTERS + ", " + GameMain.SCREEN_HEIGHT_IN_CHARACTERS +
                     ").");
         }
-        if (topLeft.x + width > GameMain.SCREEN_WIDTH) {
+        if (topLeft.x + width > GameMain.SCREEN_WIDTH_IN_CHARACTERS) {
             throw new IllegalArgumentException("Border width exceeds screen width " +
-                    GameMain.SCREEN_WIDTH +  ".");
+                    GameMain.SCREEN_WIDTH_IN_CHARACTERS +  ".");
         }
-        if (topLeft.y + height > GameMain.SCREEN_HEIGHT) {
+        if (topLeft.y + height > GameMain.SCREEN_HEIGHT_IN_CHARACTERS) {
             throw new IllegalArgumentException("Border height exceeds screen height "
-                    + GameMain.SCREEN_HEIGHT + ".");
+                    + GameMain.SCREEN_HEIGHT_IN_CHARACTERS + ".");
         }
 
         char hLine = single ? Display.SH_LINE : Display.DH_LINE;
@@ -147,8 +146,8 @@ public abstract class Screen {
      * @return
      */
     protected boolean isInBounds(Point p) {
-        if (p.x < 0 || p.x >= GameMain.SCREEN_WIDTH || p.y < 0 ||
-                p.y >= GameMain.SCREEN_HEIGHT) {
+        if (p.x < 0 || p.x >= GameMain.SCREEN_WIDTH_IN_CHARACTERS || p.y < 0 ||
+                p.y >= GameMain.SCREEN_HEIGHT_IN_CHARACTERS) {
             return false;
         }
         return true;

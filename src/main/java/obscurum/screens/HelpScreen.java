@@ -148,11 +148,11 @@ public class HelpScreen extends Screen {
     int line = 1;
 
     for (String control : controls) {
-      terminal.writeCenter(control, line);
+      terminal.writeCentred(control, line);
       line++;
     }
-    terminal.writeCenter("Press [esc] to go back.",
-        GameMain.SCREEN_HEIGHT - 5);
+    terminal.writeCentred("Press [esc] to go back.",
+        GameMain.SCREEN_HEIGHT_IN_CHARACTERS - 5);
   }
 
   @Override

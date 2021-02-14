@@ -5,7 +5,7 @@ import java.awt.Color;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import obscurum.GameMain;
+import obscurum.display.terminal.AsciiPanel;
 
 @Getter
 public abstract class Tile {
@@ -17,8 +17,8 @@ public abstract class Tile {
     public Tile(@NonNull String name, char glyph, @NonNull Color foregroundColour) {
         if (name.isEmpty()) {
             throw new IllegalArgumentException("Name cannot be empty.");
-        } else if (glyph >= GameMain.NUM_OF_GLYPHS) {
-            throw new IllegalArgumentException("Glyph must be in range 0 - " + GameMain.NUM_OF_GLYPHS + ".");
+        } else if (glyph >= AsciiPanel.NUM_OF_GLYPHS) {
+            throw new IllegalArgumentException("Glyph must be in range 0 - " + AsciiPanel.NUM_OF_GLYPHS + ".");
         }
 
         this.name = name;

@@ -19,8 +19,8 @@ public class ConfirmExitScreen extends Screen {
 
   @Override
   public void displayOutput(AsciiPanel terminal) {
-    terminal.writeCenter("Are you sure you want to quit? [Y/N]",
-        GameMain.SCREEN_HEIGHT / 2);
+    terminal.writeCentred("Are you sure you want to quit? [Y/N]",
+        GameMain.SCREEN_HEIGHT_IN_CHARACTERS / 2);
   }
 
   @Override

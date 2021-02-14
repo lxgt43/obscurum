@@ -1,6 +1,5 @@
 package obscurum.screens;
 
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 import obscurum.GameMain;
 import obscurum.creatures.Creature;
@@ -60,19 +59,19 @@ public class EndScreen extends Screen {
         String[] text = wonGame ? youWinText : youLoseText;
         DisplayColour[] colours = wonGame ? youWinColours : youLoseColours;
         for (int i = 0; i < text.length; i++) {
-            terminal.writeCenter(text[i], 3 + i, colours[i]);
+            terminal.writeCentred(text[i], 3 + i, colours[i]);
         }
 
-        terminal.writeCenter("Turns played: " + player.getTurnsAlive() + ".", 12);
-        terminal.writeCenter("Damage dealt: " + player.getDamageDealt() + ".", 13);
-        terminal.writeCenter("Enemies killed: " + player.getEnemiesKilled() + ".",
+        terminal.writeCentred("Turns played: " + player.getTurnsAlive() + ".", 12);
+        terminal.writeCentred("Damage dealt: " + player.getDamageDealt() + ".", 13);
+        terminal.writeCentred("Enemies killed: " + player.getEnemiesKilled() + ".",
                 14);
-        terminal.writeCenter("Deepest level reached: " + player.getDeepestLevel() +
+        terminal.writeCentred("Deepest level reached: " + player.getDeepestLevel() +
                 ".", 15);
-        terminal.writeCenter("Power level reached: " +
+        terminal.writeCentred("Power level reached: " +
                 player.getAttributes()[Creature.POWER_LEVEL] + ".", 16);
-        terminal.writeCenter("Press [enter] to return to the main menu.",
-                GameMain.SCREEN_HEIGHT - 5);
+        terminal.writeCentred("Press [enter] to return to the main menu.",
+                GameMain.SCREEN_HEIGHT_IN_CHARACTERS - 5);
     }
 
     @Override

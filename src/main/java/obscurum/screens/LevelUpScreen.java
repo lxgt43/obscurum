@@ -1,6 +1,6 @@
 package obscurum.screens;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
@@ -59,7 +59,7 @@ public class LevelUpScreen extends SubScreen {
 
     @Override
     public void displayOutput(AsciiPanel terminal) {
-        terminal.clear(' ', topLeft.x + 1, topLeft.y + 1, width - 1, height - 1);
+        terminal.clear(' ', new Point(topLeft.x + 1, topLeft.y + 1), new Point(topLeft.x + width, topLeft.y + height));
         drawBorders(terminal, topLeft, width, height);
         writeCentre(terminal, "Level up your attributes", 1);
         writeHorizontalLine(terminal, 2);

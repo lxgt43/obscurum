@@ -21,10 +21,10 @@ public class SpellbookScreen extends Screen {
   private static final int SPELL_LIST_TL_X = 0;
   private static final int SPELL_LIST_TL_Y = 0;
   private static final int SPELL_LIST_WIDTH = 40;
-  private static final int SPELL_LIST_HEIGHT = GameMain.SCREEN_HEIGHT;
+  private static final int SPELL_LIST_HEIGHT = GameMain.SCREEN_HEIGHT_IN_CHARACTERS;
   private static final int DESCRIPTION_TL_X = SPELL_LIST_WIDTH - 1;
   private static final int DESCRIPTION_TL_Y = 0;
-  private static final int DESCRIPTION_WIDTH = GameMain.SCREEN_WIDTH -
+  private static final int DESCRIPTION_WIDTH = GameMain.SCREEN_WIDTH_IN_CHARACTERS -
       SPELL_LIST_WIDTH + 1;
   private static final int DESCRIPTION_HEIGHT = SPELL_LIST_HEIGHT;
   private ScrollList scrollList;
