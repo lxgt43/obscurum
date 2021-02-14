@@ -168,15 +168,15 @@ public class AsciiPanel extends JPanel {
         }
     }
 
-    public void writeCenter(String string, int y) {
-        writeCenter(string, y, defaultForegroundColor, defaultBackgroundColor);
+    public void writeCentred(String string, int y) {
+        writeCentred(string, y, defaultForegroundColor, defaultBackgroundColor);
     }
 
-    public void writeCenter(String string, int y, DisplayColour foregroundColour) {
-        writeCenter(string, y, foregroundColour, defaultBackgroundColor);
+    public void writeCentred(String string, int y, DisplayColour foregroundColour) {
+        writeCentred(string, y, foregroundColour, defaultBackgroundColor);
     }
 
-    public void writeCenter(@NonNull String string, int y, DisplayColour foregroundColour, DisplayColour backgroundColour) {
+    public void writeCentred(@NonNull String string, int y, DisplayColour foregroundColour, DisplayColour backgroundColour) {
         int x = (widthInCharacters - string.length()) / 2;
 
         for (int i = 0; i < string.length(); i++) {
