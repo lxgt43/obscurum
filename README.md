@@ -2,7 +2,7 @@
 
 The build scripts may not work anymore, the project has been moved to Maven and is being periodically updated. Desperately needs a refactor.
 
-
+**Old Instructions**
 
 To compile and run the program, run the "run_obscurum" script by typing:
     ./run_obscurum
