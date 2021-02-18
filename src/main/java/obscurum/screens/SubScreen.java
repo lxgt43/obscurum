@@ -2,6 +2,8 @@ package obscurum.screens;
 
 import java.awt.Point;
 import java.lang.Math;
+import java.util.List;
+
 import obscurum.GameMain;
 import obscurum.creatures.Player;
 import obscurum.display.Display;
@@ -23,7 +25,7 @@ public abstract class SubScreen extends Screen {
     player = null;
   }
 
-  public SubScreen(Level[] world, Player player) {
+  public SubScreen(List<Level> world, Player player) {
     super(world, player);
   }
 

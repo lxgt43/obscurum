@@ -3,6 +3,8 @@ package obscurum.screens;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
 import obscurum.GameMain;
 import obscurum.creatures.Creature;
 import obscurum.creatures.Player;
@@ -114,7 +116,7 @@ public class HelpScreen extends Screen {
     }
   }
 
-  public HelpScreen(Level[] world, Player player, int helpType) {
+  public HelpScreen(List<Level> world, Player player, int helpType) {
     super(world, player);
 
     // Check for illegal arguments.

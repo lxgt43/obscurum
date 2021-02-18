@@ -2,6 +2,7 @@ package obscurum.creatures;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.List;
 
 import obscurum.display.DisplayColour;
 import obscurum.environment.Level;
@@ -29,7 +30,7 @@ public class Player extends Creature {
   private int experience;
   private int experienceToLevel;
   private int attributePoints;
-  private Level[] world;
+  private List<Level> world;
   private int enemiesKilled;
   private int deepestLevel;
   private int currentLevel;
@@ -114,7 +115,7 @@ public class Player extends Creature {
     return experienceToLevel;
   }
 
-  public Level[] getWorld() {
+  public List<Level> getWorld() {
     return world;
   }
 
@@ -142,7 +143,7 @@ public class Player extends Creature {
     this.screenLocation = screenLocation;
   }
 
-  public void setWorld(Level[] world) {
+  public void setWorld(List<Level> world) {
     this.world = world;
   }
 

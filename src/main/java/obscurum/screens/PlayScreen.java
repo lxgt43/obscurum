@@ -5,6 +5,8 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.lang.Math;
 import java.util.ArrayList;
+import java.util.List;
+
 import obscurum.GameMain;
 import obscurum.creatures.Creature;
 import obscurum.creatures.Player;
@@ -52,7 +54,7 @@ public class PlayScreen extends Screen {
     private CreatureFactory cf;
     private FurnitureFactory ff;
 
-    public PlayScreen(Level[] world, Player player) {
+    public PlayScreen(List<Level> world, Player player) {
         super(world, player);
         subScreen = new NullScreen();
     }
@@ -235,7 +237,7 @@ public class PlayScreen extends Screen {
     }
 
     public void createWorld(int levels) {
-        world = new Level[levels];
+        world = new ArrayList<>(levels);
         ArrayList<ForegroundTile> foregroundOptions =
                 new ArrayList<ForegroundTile>();
         ArrayList<BackgroundTile> backgroundOptions =
@@ -267,19 +269,19 @@ public class PlayScreen extends Screen {
             BackgroundTile b = Util.pickRandomElement(backgroundOptions);
             boolean next = i == levels - 1 ? false : true;
             boolean prev = i == 0 ? false : true;
-            world[i] = Math.random() < 0.5 ?
+            world.add(Math.random() < 0.5 ?
                     new DungeonBuilder(91, 31, f, b, next, prev).build(5000, 5, 13, 0.1,
                             -1) :
-                    new CaveBuilder(91, 31, f, b, next, prev).build();
+                    new CaveBuilder(91, 31, f, b, next, prev).build());
             if (prev) {
-                world[i].setPrevious(world[i - 1]);
-                world[i - 1].setNext(world[i]);
+                world.get(i).setPrevious(world.get(i - 1));
+                world.get(i - 1).setNext(world.get(i));
             }
         }
 
         for (int l = 0; l < levels; l++) {
-            cf = new CreatureFactory(world[l]);
-            ff = new FurnitureFactory(world[l]);
+            cf = new CreatureFactory(world.get(l));
+            ff = new FurnitureFactory(world.get(l));
 
             if (l == 0) {
                 player = cf.newPlayer();
@@ -314,13 +316,13 @@ public class PlayScreen extends Screen {
             if (player.hasAmulet() && !player.hasSpawnedExit()) {
                 Point location;
                 do {
-                    location = world[0].getRandomEmptyLocation();
-                } while (world[0].countSurroundingForegroundTiles(location,
+                    location = world.get(0).getRandomEmptyLocation();
+                } while (world.get(0).countSurroundingForegroundTiles(location,
                         new EmptyTile()) < 8);
-                world[0].setBackgroundTile(location, new ExitPortal(
-                        world[0].getBackgroundTile(location)));
-                for (int i = 0; i < world.length; i++) {
-                    world[i].powerUpCreatures();
+                world.get(0).setBackgroundTile(location, new ExitPortal(
+                        world.get(0).getBackgroundTile(location)));
+                for (int i = 0; i < world.size(); i++) {
+                    world.get(i).powerUpCreatures();
                 }
                 player.setSpawnedExit(true);
             }

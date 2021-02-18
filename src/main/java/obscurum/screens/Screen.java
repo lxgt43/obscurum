@@ -4,80 +4,32 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
+
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import obscurum.GameMain;
 import obscurum.creatures.Player;
 import obscurum.display.Display;
 import obscurum.display.DisplayColour;
 import obscurum.display.terminal.AsciiPanel;
 import obscurum.environment.Level;
-import obscurum.placeholders.NullCreature;
 
-/**
- * This models a game screen, which displays information and responds to user
- * input by changing screens to modify the output.
- * @author Alex Ghita
- */
+@NoArgsConstructor
 public abstract class Screen {
-    protected Level[] world;
+    protected List<Level> world;
     protected Player player;
 
-    /**
-     * Default constructor. To be used by screens which do not record the game
-     * state (world and player), such as the main menu screen.
-     */
-    public Screen() {
-        super();
-    }
-
-    /**
-     * Class constructor for screens which take into account the game world and
-     * player, such as the play screen or the inventory screen.
-     * @param world
-     * @param player
-     */
-    public Screen(Level[] world, Player player) {
-        // Check for illegal arguments.
-        if (world == null) {
-            throw new IllegalArgumentException("World cannot be null.");
-        }
-        if (player == null || player.isOfType(new NullCreature())) {
-            throw new IllegalArgumentException("Player cannot be null.");
-        }
-
+    public Screen(@NonNull List<Level> world, @NonNull Player player) {
         this.world = world;
         this.player = player;
     }
 
-    /**
-     * Displays the screen's output. This will vary from text to the actual game,
-     * depending on the screen.
-     * @param terminal
-     */
     public abstract void displayOutput(AsciiPanel terminal);
 
-    /**
-     * Responds to the user's keyboard input and returns an appropriate screen.
-     * This will handle actions such as moving around, which will return the same
-     * screen, or pressing a button that changes the screen.
-     * @param key
-     * @return the screen to be displayed as a consequence of pressing a button
-     */
     public abstract Screen respondToUserInput(KeyEvent key);
 
-    /**
-     * Draws a rectangular frame of the given size starting from the given top
-     * left coordinates.
-     * @param terminal
-     * @param topLeft
-     * @param width
-     * @param height
-     * @param single true if the border will be a single line, false if double
-     */
-    protected void drawBorders(AsciiPanel terminal, Point topLeft, int width, int height, boolean single, DisplayColour foreground, DisplayColour background) {
-        // Check for illegal arguments.
-        if (terminal == null) {
-            throw new IllegalArgumentException("Terminal cannot be null.");
-        }
+    protected void drawBorders(@NonNull AsciiPanel terminal, Point topLeft, int width, int height, boolean single, DisplayColour foreground, DisplayColour background) {
         if (!isInBounds(topLeft)) {
             throw new IllegalArgumentException("Top left corner must be between " +
                     "(0, 0) and (" + GameMain.SCREEN_WIDTH_IN_CHARACTERS + ", " + GameMain.SCREEN_HEIGHT_IN_CHARACTERS +
@@ -130,21 +82,10 @@ public abstract class Screen {
         }
     }
 
-    /**
-     * Checks whether the given location is on the screen.
-     * @param x
-     * @param y
-     * @return
-     */
     protected boolean isInBounds(int x, int y) {
         return isInBounds(new Point(x, y));
     }
 
-    /**
-     * Checks whether the given point is on the screen.
-     * @param p
-     * @return
-     */
     protected boolean isInBounds(Point p) {
         if (p.x < 0 || p.x >= GameMain.SCREEN_WIDTH_IN_CHARACTERS || p.y < 0 ||
                 p.y >= GameMain.SCREEN_HEIGHT_IN_CHARACTERS) {

@@ -2,6 +2,7 @@ package obscurum.screens;
 
 import java.awt.Point;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 import obscurum.GameMain;
 import obscurum.creatures.Creature;
@@ -50,7 +51,7 @@ public class CharacterScreen extends Screen {
     };
     private int highlighted;
 
-    public CharacterScreen(Level[] world, Player player) {
+    public CharacterScreen(List<Level> world, Player player) {
         super(world, player);
         highlighted = 0;
     }

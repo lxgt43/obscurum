@@ -3,6 +3,8 @@ package obscurum.screens;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
+import java.util.List;
+
 import obscurum.GameMain;
 import obscurum.creatures.Creature;
 import obscurum.creatures.Player;
@@ -53,7 +55,7 @@ public class InventoryScreen extends Screen {
      * @param world
      * @param player
      */
-    public InventoryScreen(Level[] world, Player player) {
+    public InventoryScreen(List<Level> world, Player player) {
         super(world, player);
         highlighted = 0;
     }

@@ -1,6 +1,7 @@
 package obscurum.screens;
 
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 import obscurum.GameMain;
 import obscurum.creatures.Player;
@@ -13,7 +14,7 @@ import obscurum.environment.Level;
  * @author Alex Ghita
  */
 public class ConfirmExitScreen extends Screen {
-  public ConfirmExitScreen(Level[] world, Player player) {
+  public ConfirmExitScreen(List<Level> world, Player player) {
     super(world, player);
   }
 

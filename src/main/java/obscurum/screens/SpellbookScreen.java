@@ -3,6 +3,8 @@ package obscurum.screens;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.List;
+
 import obscurum.GameMain;
 import obscurum.creatures.Player;
 import obscurum.creatures.abilities.Spell;
@@ -29,7 +31,7 @@ public class SpellbookScreen extends Screen {
   private static final int DESCRIPTION_HEIGHT = SPELL_LIST_HEIGHT;
   private ScrollList scrollList;
 
-  public SpellbookScreen(Level[] world, Player player) {
+  public SpellbookScreen(List<Level> world, Player player) {
     super(world, player);
     makeScrollList();
   }
