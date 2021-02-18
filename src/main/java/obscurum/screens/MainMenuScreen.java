@@ -1,7 +1,8 @@
 package obscurum.screens;
 
 import java.awt.event.KeyEvent;
-import obscurum.GameMain;
+
+import obscurum.Main;
 import obscurum.display.DisplayColour;
 import obscurum.display.terminal.AsciiPanel;
 
@@ -33,11 +34,11 @@ public class MainMenuScreen extends Screen {
             terminal.writeCentred(mainMenu[i], 3 + i, mainMenuColours[i]);
         }
         terminal.writeCentred("Press [enter] to start a new game.",
-                GameMain.SCREEN_HEIGHT_IN_CHARACTERS - 9);
+                Main.SCREEN_HEIGHT_IN_CHARACTERS - 9);
         terminal.writeCentred("Press [e] to start the game editor.",
-                GameMain.SCREEN_HEIGHT_IN_CHARACTERS - 7);
+                Main.SCREEN_HEIGHT_IN_CHARACTERS - 7);
         terminal.writeCentred("Press [q] to quit the program.",
-                GameMain.SCREEN_HEIGHT_IN_CHARACTERS - 5);
+                Main.SCREEN_HEIGHT_IN_CHARACTERS - 5);
     }
 
     @Override

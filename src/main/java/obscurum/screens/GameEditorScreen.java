@@ -6,7 +6,8 @@ import java.awt.event.KeyEvent;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
-import obscurum.GameMain;
+
+import obscurum.Main;
 import obscurum.display.DisplayColour;
 import obscurum.display.terminal.AsciiPanel;
 import obscurum.display.Display;
@@ -26,13 +27,13 @@ public class GameEditorScreen extends Screen {
     private static final int CURRENT_LIST_TL_X = 0;
     private static final int CURRENT_LIST_TL_Y = 0;
     private static final int CURRENT_LIST_WIDTH = 25;
-    private static final int CURRENT_LIST_HEIGHT = GameMain.SCREEN_HEIGHT_IN_CHARACTERS;
+    private static final int CURRENT_LIST_HEIGHT = Main.SCREEN_HEIGHT_IN_CHARACTERS;
     private static final int OBJECT_DATA_TL_X = CURRENT_LIST_TL_X +
             CURRENT_LIST_WIDTH - 1;
     private static final int OBJECT_DATA_TL_Y = 0;
-    private static final int OBJECT_DATA_WIDTH = GameMain.SCREEN_WIDTH_IN_CHARACTERS -
+    private static final int OBJECT_DATA_WIDTH = Main.SCREEN_WIDTH_IN_CHARACTERS -
             CURRENT_LIST_WIDTH + 1;
-    private static final int OBJECT_DATA_HEIGHT = GameMain.SCREEN_HEIGHT_IN_CHARACTERS;
+    private static final int OBJECT_DATA_HEIGHT = Main.SCREEN_HEIGHT_IN_CHARACTERS;
     private static final String[] listNames = {"Foreground Tiles",
             "Background Tiles"};
     private ArrayList<CustomForegroundTile> foregroundTiles;

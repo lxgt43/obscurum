@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import obscurum.GameMain;
+import obscurum.Main;
 import obscurum.creatures.Creature;
 import obscurum.creatures.Player;
 import obscurum.display.terminal.AsciiPanel;
@@ -154,7 +154,7 @@ public class HelpScreen extends Screen {
       line++;
     }
     terminal.writeCentred("Press [esc] to go back.",
-        GameMain.SCREEN_HEIGHT_IN_CHARACTERS - 5);
+        Main.SCREEN_HEIGHT_IN_CHARACTERS - 5);
   }
 
   @Override

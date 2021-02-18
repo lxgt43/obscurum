@@ -8,7 +8,7 @@ import java.util.List;
 
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import obscurum.GameMain;
+import obscurum.Main;
 import obscurum.creatures.Player;
 import obscurum.display.Display;
 import obscurum.display.DisplayColour;
@@ -32,16 +32,16 @@ public abstract class Screen {
     protected void drawBorders(@NonNull AsciiPanel terminal, Point topLeft, int width, int height, boolean single, DisplayColour foreground, DisplayColour background) {
         if (!isInBounds(topLeft)) {
             throw new IllegalArgumentException("Top left corner must be between " +
-                    "(0, 0) and (" + GameMain.SCREEN_WIDTH_IN_CHARACTERS + ", " + GameMain.SCREEN_HEIGHT_IN_CHARACTERS +
+                    "(0, 0) and (" + Main.SCREEN_WIDTH_IN_CHARACTERS + ", " + Main.SCREEN_HEIGHT_IN_CHARACTERS +
                     ").");
         }
-        if (topLeft.x + width > GameMain.SCREEN_WIDTH_IN_CHARACTERS) {
+        if (topLeft.x + width > Main.SCREEN_WIDTH_IN_CHARACTERS) {
             throw new IllegalArgumentException("Border width exceeds screen width " +
-                    GameMain.SCREEN_WIDTH_IN_CHARACTERS +  ".");
+                    Main.SCREEN_WIDTH_IN_CHARACTERS +  ".");
         }
-        if (topLeft.y + height > GameMain.SCREEN_HEIGHT_IN_CHARACTERS) {
+        if (topLeft.y + height > Main.SCREEN_HEIGHT_IN_CHARACTERS) {
             throw new IllegalArgumentException("Border height exceeds screen height "
-                    + GameMain.SCREEN_HEIGHT_IN_CHARACTERS + ".");
+                    + Main.SCREEN_HEIGHT_IN_CHARACTERS + ".");
         }
 
         char hLine = single ? Display.SH_LINE : Display.DH_LINE;
@@ -87,8 +87,8 @@ public abstract class Screen {
     }
 
     protected boolean isInBounds(Point p) {
-        if (p.x < 0 || p.x >= GameMain.SCREEN_WIDTH_IN_CHARACTERS || p.y < 0 ||
-                p.y >= GameMain.SCREEN_HEIGHT_IN_CHARACTERS) {
+        if (p.x < 0 || p.x >= Main.SCREEN_WIDTH_IN_CHARACTERS || p.y < 0 ||
+                p.y >= Main.SCREEN_HEIGHT_IN_CHARACTERS) {
             return false;
         }
         return true;

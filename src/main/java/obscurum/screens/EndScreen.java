@@ -1,7 +1,8 @@
 package obscurum.screens;
 
 import java.awt.event.KeyEvent;
-import obscurum.GameMain;
+
+import obscurum.Main;
 import obscurum.creatures.Creature;
 import obscurum.creatures.Player;
 import obscurum.display.DisplayColour;
@@ -71,7 +72,7 @@ public class EndScreen extends Screen {
         terminal.writeCentred("Power level reached: " +
                 player.getAttributes()[Creature.POWER_LEVEL] + ".", 16);
         terminal.writeCentred("Press [enter] to return to the main menu.",
-                GameMain.SCREEN_HEIGHT_IN_CHARACTERS - 5);
+                Main.SCREEN_HEIGHT_IN_CHARACTERS - 5);
     }
 
     @Override
