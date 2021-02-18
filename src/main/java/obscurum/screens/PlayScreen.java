@@ -5,7 +5,9 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.lang.Math;
 import java.util.ArrayList;
-import obscurum.GameMain;
+import java.util.List;
+
+import obscurum.Main;
 import obscurum.creatures.Creature;
 import obscurum.creatures.Player;
 import obscurum.creatures.ai.CorpseAI;
@@ -41,18 +43,18 @@ public class PlayScreen extends Screen {
     public static final int STATS_TL_X = GAME_WIDTH - 1;
     public static final int STATS_TL_Y = 0;
     public static final int STATS_WIDTH =
-            GameMain.SCREEN_WIDTH_IN_CHARACTERS - GAME_WIDTH + 1;
+            Main.SCREEN_WIDTH_IN_CHARACTERS - GAME_WIDTH + 1;
     public static final int STATS_HEIGHT = GAME_HEIGHT;
     public static final int LOG_TL_X = 0;
     public static final int LOG_TL_Y = GAME_HEIGHT - 1;
-    public static final int LOG_WIDTH = GameMain.SCREEN_WIDTH_IN_CHARACTERS;
-    public static final int LOG_HEIGHT = GameMain.SCREEN_HEIGHT_IN_CHARACTERS -
+    public static final int LOG_WIDTH = Main.SCREEN_WIDTH_IN_CHARACTERS;
+    public static final int LOG_HEIGHT = Main.SCREEN_HEIGHT_IN_CHARACTERS -
             GAME_HEIGHT + 1;
     public Screen subScreen;
     private CreatureFactory cf;
     private FurnitureFactory ff;
 
-    public PlayScreen(Level[] world, Player player) {
+    public PlayScreen(List<Level> world, Player player) {
         super(world, player);
         subScreen = new NullScreen();
     }
@@ -79,7 +81,7 @@ public class PlayScreen extends Screen {
                 Display.FG_WINDOW_FRAME, Display.BG_WINDOW_FRAME);
         terminal.write(Display.DV_DR_INTERSECT, LOG_TL_X, LOG_TL_Y,
                 Display.FG_WINDOW_FRAME, Display.BG_WINDOW_FRAME);
-        terminal.write(Display.DV_DL_INTERSECT, GameMain.SCREEN_WIDTH_IN_CHARACTERS - 1,
+        terminal.write(Display.DV_DL_INTERSECT, Main.SCREEN_WIDTH_IN_CHARACTERS - 1,
                 LOG_TL_Y, Display.FG_WINDOW_FRAME, Display.BG_WINDOW_FRAME);
         terminal.write(Display.DH_DT_INTERSECT, GAME_WIDTH - 1,
                 GAME_HEIGHT - 1, Display.FG_WINDOW_FRAME, Display.BG_WINDOW_FRAME);
@@ -235,7 +237,7 @@ public class PlayScreen extends Screen {
     }
 
     public void createWorld(int levels) {
-        world = new Level[levels];
+        world = new ArrayList<>(levels);
         ArrayList<ForegroundTile> foregroundOptions =
                 new ArrayList<ForegroundTile>();
         ArrayList<BackgroundTile> backgroundOptions =
@@ -267,19 +269,19 @@ public class PlayScreen extends Screen {
             BackgroundTile b = Util.pickRandomElement(backgroundOptions);
             boolean next = i == levels - 1 ? false : true;
             boolean prev = i == 0 ? false : true;
-            world[i] = Math.random() < 0.5 ?
+            world.add(Math.random() < 0.5 ?
                     new DungeonBuilder(91, 31, f, b, next, prev).build(5000, 5, 13, 0.1,
                             -1) :
-                    new CaveBuilder(91, 31, f, b, next, prev).build();
+                    new CaveBuilder(91, 31, f, b, next, prev).build());
             if (prev) {
-                world[i].setPrevious(world[i - 1]);
-                world[i - 1].setNext(world[i]);
+                world.get(i).setPrevious(world.get(i - 1));
+                world.get(i - 1).setNext(world.get(i));
             }
         }
 
         for (int l = 0; l < levels; l++) {
-            cf = new CreatureFactory(world[l]);
-            ff = new FurnitureFactory(world[l]);
+            cf = new CreatureFactory(world.get(l));
+            ff = new FurnitureFactory(world.get(l));
 
             if (l == 0) {
                 player = cf.newPlayer();
@@ -314,13 +316,13 @@ public class PlayScreen extends Screen {
             if (player.hasAmulet() && !player.hasSpawnedExit()) {
                 Point location;
                 do {
-                    location = world[0].getRandomEmptyLocation();
-                } while (world[0].countSurroundingForegroundTiles(location,
+                    location = world.get(0).getRandomEmptyLocation();
+                } while (world.get(0).countSurroundingForegroundTiles(location,
                         new EmptyTile()) < 8);
-                world[0].setBackgroundTile(location, new ExitPortal(
-                        world[0].getBackgroundTile(location)));
-                for (int i = 0; i < world.length; i++) {
-                    world[i].powerUpCreatures();
+                world.get(0).setBackgroundTile(location, new ExitPortal(
+                        world.get(0).getBackgroundTile(location)));
+                for (int i = 0; i < world.size(); i++) {
+                    world.get(i).powerUpCreatures();
                 }
                 player.setSpawnedExit(true);
             }

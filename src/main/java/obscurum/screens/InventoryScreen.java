@@ -3,7 +3,9 @@ package obscurum.screens;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
-import obscurum.GameMain;
+import java.util.List;
+
+import obscurum.Main;
 import obscurum.creatures.Creature;
 import obscurum.creatures.Player;
 import obscurum.display.DisplayColour;
@@ -33,7 +35,7 @@ public class InventoryScreen extends Screen {
     private static final int INVENTORY_TL_X = 0;
     private static final int INVENTORY_TL_Y = 0;
     private static final int INVENTORY_WIDTH = 38;
-    private static final int INVENTORY_HEIGHT = GameMain.SCREEN_HEIGHT_IN_CHARACTERS;
+    private static final int INVENTORY_HEIGHT = Main.SCREEN_HEIGHT_IN_CHARACTERS;
     // Constants for the selected item's description placement and size.
     private static final int DESCRIPTION_TL_X = INVENTORY_WIDTH - 1;
     private static final int DESCRIPTION_TL_Y = 0;
@@ -43,7 +45,7 @@ public class InventoryScreen extends Screen {
     private static final int DISPLAY_TL_X =
             DESCRIPTION_TL_X + DESCRIPTION_WIDTH - 1;
     private static final int DISPLAY_TL_Y = 0;
-    public static final int DISPLAY_WIDTH = GameMain.SCREEN_WIDTH_IN_CHARACTERS -
+    public static final int DISPLAY_WIDTH = Main.SCREEN_WIDTH_IN_CHARACTERS -
             INVENTORY_WIDTH - DESCRIPTION_WIDTH + 2;
     public static final int DISPLAY_HEIGHT = INVENTORY_HEIGHT;
     private int highlighted;
@@ -53,7 +55,7 @@ public class InventoryScreen extends Screen {
      * @param world
      * @param player
      */
-    public InventoryScreen(Level[] world, Player player) {
+    public InventoryScreen(List<Level> world, Player player) {
         super(world, player);
         highlighted = 0;
     }

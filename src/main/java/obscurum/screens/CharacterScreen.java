@@ -2,8 +2,9 @@ package obscurum.screens;
 
 import java.awt.Point;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
-import obscurum.GameMain;
+import obscurum.Main;
 import obscurum.creatures.Creature;
 import obscurum.creatures.Player;
 import obscurum.display.Display;
@@ -23,7 +24,7 @@ public class CharacterScreen extends Screen {
     private static final int EQUIPMENT_TL_X = 0;
     private static final int EQUIPMENT_TL_Y = 0;
     private static final int EQUIPMENT_WIDTH = 38;
-    private static final int EQUIPMENT_HEIGHT = GameMain.SCREEN_HEIGHT_IN_CHARACTERS;
+    private static final int EQUIPMENT_HEIGHT = Main.SCREEN_HEIGHT_IN_CHARACTERS;
     private static final int SELECTED_ITEM_TL_X = EQUIPMENT_WIDTH - 1;
     private static final int SELECTED_ITEM_TL_Y = 0;
     private static final int SELECTED_ITEM_WIDTH = 22;
@@ -32,7 +33,7 @@ public class CharacterScreen extends Screen {
             EQUIPMENT_WIDTH + SELECTED_ITEM_WIDTH - 2;
     private static final int ATTRIBUTES_TL_Y = 0;
     private static final int ATTRIBUTES_WIDTH =
-            GameMain.SCREEN_WIDTH_IN_CHARACTERS - EQUIPMENT_WIDTH - SELECTED_ITEM_WIDTH + 2;
+            Main.SCREEN_WIDTH_IN_CHARACTERS - EQUIPMENT_WIDTH - SELECTED_ITEM_WIDTH + 2;
     private static final int ATTRIBUTES_HEIGHT = EQUIPMENT_HEIGHT;
     private static final int EQUIPMENT_SLOT_COUNT = Equipment.FEET + 1;
     private static final int EQUIPMENT_SLOT_WIDTH = 7;
@@ -50,7 +51,7 @@ public class CharacterScreen extends Screen {
     };
     private int highlighted;
 
-    public CharacterScreen(Level[] world, Player player) {
+    public CharacterScreen(List<Level> world, Player player) {
         super(world, player);
         highlighted = 0;
     }

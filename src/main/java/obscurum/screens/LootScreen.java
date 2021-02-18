@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.lang.Math;
 import java.util.ArrayList;
+import java.util.List;
+
 import obscurum.util.Util;
 import obscurum.creatures.Creature;
 import obscurum.creatures.Player;
@@ -21,7 +23,7 @@ public class LootScreen extends SubScreen {
   private Creature corpse;
   private ScrollList scrollList;
 
-  public LootScreen(Level[] world, Player player, Creature corpse) {
+  public LootScreen(List<Level> world, Player player, Creature corpse) {
     super(world, player);
 
     this.corpse = corpse;

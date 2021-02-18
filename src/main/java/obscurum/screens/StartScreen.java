@@ -1,7 +1,8 @@
 package obscurum.screens;
 
 import java.awt.event.KeyEvent;
-import obscurum.GameMain;
+
+import obscurum.Main;
 import obscurum.display.DisplayColour;
 import obscurum.display.terminal.AsciiPanel;
 
@@ -12,7 +13,7 @@ import obscurum.display.terminal.AsciiPanel;
 public class StartScreen extends Screen {
     @Override
     public void displayOutput(AsciiPanel terminal) {
-        int lineOffset = GameMain.SCREEN_HEIGHT_IN_CHARACTERS / 5;
+        int lineOffset = Main.SCREEN_HEIGHT_IN_CHARACTERS / 5;
 
         // patorjk.com, doom font.
         terminal.writeCentred(
@@ -44,7 +45,7 @@ public class StartScreen extends Screen {
                 "`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'",
                 lineOffset + 9, DisplayColour.fromRgb("D", 82, 6, 4));
         terminal.writeCentred("Press any key to start.",
-                GameMain.SCREEN_HEIGHT_IN_CHARACTERS - 5, DisplayColour.fromRgb("D", 172, 14, 9));
+                Main.SCREEN_HEIGHT_IN_CHARACTERS - 5, DisplayColour.fromRgb("D", 172, 14, 9));
     }
 
     @Override

@@ -1,8 +1,9 @@
 package obscurum.screens;
 
 import java.awt.event.KeyEvent;
+import java.util.List;
 
-import obscurum.GameMain;
+import obscurum.Main;
 import obscurum.creatures.Player;
 import obscurum.display.terminal.AsciiPanel;
 import obscurum.environment.Level;
@@ -13,14 +14,14 @@ import obscurum.environment.Level;
  * @author Alex Ghita
  */
 public class ConfirmExitScreen extends Screen {
-  public ConfirmExitScreen(Level[] world, Player player) {
+  public ConfirmExitScreen(List<Level> world, Player player) {
     super(world, player);
   }
 
   @Override
   public void displayOutput(AsciiPanel terminal) {
     terminal.writeCentred("Are you sure you want to quit? [Y/N]",
-        GameMain.SCREEN_HEIGHT_IN_CHARACTERS / 2);
+        Main.SCREEN_HEIGHT_IN_CHARACTERS / 2);
   }
 
   @Override

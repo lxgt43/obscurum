@@ -4,12 +4,12 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.lang.Math;
 import java.util.ArrayList;
+import java.util.List;
 
 import obscurum.display.DisplayColour;
 import obscurum.util.Util;
 import obscurum.creatures.Player;
 import obscurum.creatures.abilities.Spell;
-import obscurum.display.Display;
 import obscurum.display.ListEntry;
 import obscurum.display.ScrollList;
 import obscurum.display.terminal.AsciiPanel;
@@ -23,7 +23,7 @@ import obscurum.environment.Level;
 public class SpellCastScreen extends SubScreen {
     private ScrollList scrollList;
 
-    public SpellCastScreen(Level[] world, Player player) {
+    public SpellCastScreen(List<Level> world, Player player) {
         super(world, player);
 
         computeWidth();

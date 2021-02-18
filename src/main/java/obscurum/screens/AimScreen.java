@@ -3,6 +3,8 @@ package obscurum.screens;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.List;
+
 import obscurum.creatures.Creature;
 import obscurum.creatures.Player;
 import obscurum.creatures.util.Line;
@@ -23,7 +25,7 @@ public abstract class AimScreen extends SubScreen {
     protected Point screenLocation;
     protected int maxRange;
 
-    public AimScreen(Level[] world, Player player, int maxRange) {
+    public AimScreen(List<Level> world, Player player, int maxRange) {
         super(world, player);
         this.maxRange = maxRange;
 

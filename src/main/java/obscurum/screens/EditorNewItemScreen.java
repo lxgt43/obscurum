@@ -4,7 +4,8 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.lang.Math;
 import java.util.ArrayList;
-import obscurum.GameMain;
+
+import obscurum.Main;
 import obscurum.display.Display;
 import obscurum.display.ListEntry;
 import obscurum.display.ScrollList;
@@ -71,8 +72,8 @@ public class EditorNewItemScreen extends SubScreen {
 
     @Override
     protected void computeTopLeft() {
-        topLeft = new Point(GameMain.SCREEN_WIDTH_IN_CHARACTERS / 2 - width / 2,
-                GameMain.SCREEN_HEIGHT_IN_CHARACTERS / 2 - height / 2);
+        topLeft = new Point(Main.SCREEN_WIDTH_IN_CHARACTERS / 2 - width / 2,
+                Main.SCREEN_HEIGHT_IN_CHARACTERS / 2 - height / 2);
     }
 
     @Override

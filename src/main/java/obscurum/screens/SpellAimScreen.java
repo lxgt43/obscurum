@@ -6,6 +6,8 @@ import obscurum.environment.Level;
 import obscurum.environment.foreground.ForegroundTile;
 import obscurum.placeholders.NullCreature;
 
+import java.util.List;
+
 /**
  * This models an aim screen for casting spells at a target.
  * @author Alex Ghita
@@ -13,8 +15,8 @@ import obscurum.placeholders.NullCreature;
 public class SpellAimScreen extends AimScreen {
   private int spellIndex;
 
-  public SpellAimScreen(Level[] world, Player player, int maxRange,
-      int spellIndex) {
+  public SpellAimScreen(List<Level> world, Player player, int maxRange,
+                        int spellIndex) {
     super(world, player, maxRange);
     this.spellIndex = spellIndex;
   }

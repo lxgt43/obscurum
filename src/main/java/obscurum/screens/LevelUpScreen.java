@@ -3,6 +3,7 @@ package obscurum.screens;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import obscurum.creatures.Creature;
 import obscurum.creatures.Player;
@@ -24,7 +25,7 @@ public class LevelUpScreen extends SubScreen {
     private String[] attributes = {"Line of Sight", "Inventory Size", "Strength",
             "Agility", "Stamina", "Spirit", "Intellect"};
 
-    public LevelUpScreen(Level[] world, Player player) {
+    public LevelUpScreen(List<Level> world, Player player) {
         super(world, player);
 
         computeWidth();
