@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -40,7 +41,7 @@ public class Main {
 
     private static List<BufferedImage> loadGlyphs() throws IOException {
         log.info("Loading glyphs from image {}", GLYPHS_FILE_PATH);
-        BufferedImage glyphSprite = ImageIO.read(GameDriver.class.getResource(GLYPHS_FILE_PATH));
+        BufferedImage glyphSprite = ImageIO.read(Objects.requireNonNull(GameDriver.class.getResource(GLYPHS_FILE_PATH)));
 
         return IntStream.range(0, 256)
                 .mapToObj(i -> {
